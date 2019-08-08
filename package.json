@@ -1,0 +1,9 @@
+{
+  "name": "lucien",
+  "version": "0.0.1",
+  "description": "A Markdown desktop text editor",
+  "main": "main.js",
+  "repository": "https://github.com/agorf/lucien",
+  "author": "Angelos Orfanakos",
+  "license": "MIT"
+}
