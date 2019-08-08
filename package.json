@@ -6,6 +6,9 @@
   "repository": "https://github.com/agorf/lucien",
   "author": "Angelos Orfanakos",
   "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
   "dependencies": {
     "electron": "^6.0.1"
   }
