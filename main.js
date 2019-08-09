@@ -28,7 +28,11 @@ const handleAppReady = () => {
   const appMenu = Menu.buildFromTemplate(appMenuTemplate);
   Menu.setApplicationMenu(appMenu);
 
-  mainWindow = new BrowserWindow();
+  mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
   mainWindow.loadFile('editor.html');
 };
 
