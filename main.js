@@ -20,7 +20,7 @@ const handleAppReady = () => {
   Menu.setApplicationMenu(appMenu);
 
   mainWindow = new BrowserWindow();
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('editor.html');
 };
 
 app.on('ready', handleAppReady);
