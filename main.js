@@ -12,6 +12,15 @@ const appMenuTemplate = [
         click: app.quit
       }
     ]
+  },
+  {
+    label: 'Tools',
+    submenu: [
+      {
+        label: 'Toggle DevTools',
+        role: 'toggleDevTools'
+      }
+    ]
   }
 ];
 
