@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, remote } = require('electron');
 const marked = require('marked');
 
 const markdownView = document.querySelector('.markdown-view');
@@ -8,9 +8,18 @@ const renderMarkdownToHTML = markdown => {
   htmlView.innerHTML = marked(markdown);
 };
 
-ipcRenderer.on('file-opened', (event, { data }) => {
+const mainProcess = remote.require('./main');
+
+let openFilePath = null;
+
+ipcRenderer.on('file-opened', (event, { path, data }) => {
+  openFilePath = path;
   markdownView.value = data;
   renderMarkdownToHTML(data);
+});
+
+ipcRenderer.on('save-file', () => {
+  mainProcess.saveFile(openFilePath, markdownView.value);
 });
 
 markdownView.addEventListener('keyup', ({ target }) => {

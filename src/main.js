@@ -41,6 +41,15 @@ const openFileWithDialog = () => {
     .catch(console.log);
 };
 
+exports.saveFile = (filePath, data) => {
+  fs.writeFile(filePath, data, error => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+  });
+};
+
 const appMenuTemplate = [
   {
     label: 'File',
@@ -49,6 +58,11 @@ const appMenuTemplate = [
         label: 'Open',
         accelerator: 'CommandOrControl+O',
         click: openFileWithDialog
+      },
+      {
+        label: 'Save',
+        accelerator: 'CommandOrControl+S',
+        click: () => mainWindow.webContents.send('save-file')
       },
       {
         label: 'Quit',
