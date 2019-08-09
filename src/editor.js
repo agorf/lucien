@@ -12,3 +12,7 @@ ipcRenderer.on('file-opened', (event, { data }) => {
   markdownView.value = data;
   renderMarkdownToHTML(data);
 });
+
+markdownView.addEventListener('keyup', ({ target }) => {
+  renderMarkdownToHTML(target.value);
+});
