@@ -16,6 +16,7 @@ ipcRenderer.on('open-file', (event, { path, data }) => {
   openFilePath = path;
   markdownView.value = data;
   renderMarkdownToHTML(data);
+  markdownView.focus();
 });
 
 ipcRenderer.on('save-file', () => {
@@ -26,6 +27,7 @@ ipcRenderer.on('new-file', () => {
   openFilePath = null;
   markdownView.value = '';
   htmlView.innerHTML = '';
+  markdownView.focus();
 });
 
 ipcRenderer.on('window-resize', (event, bounds) => {
@@ -37,3 +39,5 @@ ipcRenderer.on('window-resize', (event, bounds) => {
 markdownView.addEventListener('keyup', ({ target }) => {
   renderMarkdownToHTML(target.value);
 });
+
+markdownView.focus();
