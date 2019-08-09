@@ -22,6 +22,12 @@ ipcRenderer.on('save-file', () => {
   mainProcess.saveFileWithDialog(openFilePath, markdownView.value);
 });
 
+ipcRenderer.on('new-file', () => {
+  openFilePath = null;
+  markdownView.value = '';
+  htmlView.innerHTML = '';
+});
+
 markdownView.addEventListener('keyup', ({ target }) => {
   renderMarkdownToHTML(target.value);
 });

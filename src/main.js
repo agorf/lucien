@@ -73,10 +73,19 @@ exports.saveFileWithDialog = (filePath, data) => {
     .catch(console.log);
 };
 
+const newFile = () => {
+  mainWindow.webContents.send('new-file');
+};
+
 const appMenuTemplate = [
   {
     label: 'File',
     submenu: [
+      {
+        label: 'New',
+        accelerator: 'CommandOrControl+N',
+        click: newFile
+      },
       {
         label: 'Open',
         accelerator: 'CommandOrControl+O',
