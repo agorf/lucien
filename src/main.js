@@ -1,5 +1,6 @@
 const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
+const path = require('path');
 
 let mainWindow = null;
 
@@ -73,7 +74,7 @@ const handleAppReady = () => {
       nodeIntegration: true
     }
   });
-  mainWindow.loadFile('editor.html');
+  mainWindow.loadFile(path.resolve(__dirname, 'editor.html'));
 };
 
 app.on('ready', handleAppReady);
