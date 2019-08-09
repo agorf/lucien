@@ -4,6 +4,15 @@ const path = require('path');
 
 let mainWindow = null;
 
+const dialogFilters = [
+  {
+    name: 'Markdown Files',
+    extensions: ['md', 'mkd', 'mdown', 'markdown']
+  },
+  { name: 'Text Files', extensions: ['txt', 'text'] },
+  { name: 'All Files', extensions: ['*'] }
+];
+
 const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
     if (error) {
@@ -24,14 +33,7 @@ const openFileWithDialog = () => {
       title: 'Open Markdown file',
       defaultPath: app.getPath('documents'),
       properties: ['openFile'],
-      filters: [
-        {
-          name: 'Markdown Files',
-          extensions: ['md', 'mkd', 'mdown', 'markdown']
-        },
-        { name: 'Text Files', extensions: ['txt', 'text'] },
-        { name: 'All Files', extensions: ['*'] }
-      ]
+      filters: dialogFilters
     })
     .then(({ canceled, filePaths }) => {
       if (canceled) return;
@@ -41,13 +43,34 @@ const openFileWithDialog = () => {
     .catch(console.log);
 };
 
-exports.saveFile = (filePath, data) => {
+const saveFile = (filePath, data) => {
   fs.writeFile(filePath, data, error => {
     if (error) {
       console.log(error);
       return;
     }
   });
+};
+
+exports.saveFileWithDialog = (filePath, data) => {
+  if (filePath) {
+    saveFile(filePath, data);
+    return;
+  }
+
+  // Saving a new file
+  dialog
+    .showSaveDialog({
+      title: 'Save Markdown file',
+      defaultPath: app.getPath('documents'),
+      filters: dialogFilters
+    })
+    .then(({ canceled, filePath }) => {
+      if (canceled) return;
+
+      saveFile(filePath, data);
+    })
+    .catch(console.log);
 };
 
 const appMenuTemplate = [

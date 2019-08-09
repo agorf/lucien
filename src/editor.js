@@ -19,7 +19,7 @@ ipcRenderer.on('open-file', (event, { path, data }) => {
 });
 
 ipcRenderer.on('save-file', () => {
-  mainProcess.saveFile(openFilePath, markdownView.value);
+  mainProcess.saveFileWithDialog(openFilePath, markdownView.value);
 });
 
 markdownView.addEventListener('keyup', ({ target }) => {
