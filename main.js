@@ -1,11 +1,48 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, dialog, Menu } = require('electron');
+const fs = require('fs');
 
 let mainWindow = null;
+
+const openFile = (filePath) => {
+  fs.readFile(filePath, (error, data) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    mainWindow.webContents.send('file-opened', {
+      path: filePath,
+      data: data.toString()
+    });
+  });
+};
+
+const openFileWithDialog = () => {
+  dialog.showOpenDialog({
+    title: 'Open Markdown file',
+    defaultPath: app.getPath('documents'),
+    properties: ['openFile'],
+    filters: [
+      { name: 'Markdown Files', extensions: ['md', 'mkd', 'markdown'] },
+      { name: 'Text Files', extensions: ['txt', 'text'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  }).then(({ canceled, filePaths }) => {
+    if (canceled) return;
+
+    openFile(filePaths[0]);
+  }).catch(console.log);
+};
 
 const appMenuTemplate = [
   {
     label: 'File',
     submenu: [
+      {
+        label: 'Open',
+        accelerator: 'CommandOrControl+O',
+        click: openFileWithDialog
+      },
       {
         label: 'Quit',
         accelerator: 'CommandOrControl+Q',
