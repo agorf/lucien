@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 let editorWindow = null;
+const appName = 'Lucien';
 
 const dialogFilters = [
   {
@@ -12,6 +13,16 @@ const dialogFilters = [
   { name: 'Text Files', extensions: ['txt', 'text'] },
   { name: 'All Files', extensions: ['*'] }
 ];
+
+const updateWindowTitle = filePath => {
+  let title = appName;
+
+  if (filePath) {
+    title = `${path.basename(filePath)} - ${title}`;
+  }
+
+  editorWindow.setTitle(title);
+};
 
 const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
@@ -24,6 +35,8 @@ const openFile = filePath => {
       path: filePath,
       data: data.toString()
     });
+
+    updateWindowTitle(filePath);
   });
 };
 
@@ -49,6 +62,8 @@ const saveFile = (filePath, data) => {
       console.log(error);
       return;
     }
+
+    updateWindowTitle(filePath);
   });
 };
 
@@ -75,6 +90,8 @@ exports.saveFileWithDialog = (filePath, data) => {
 
 const newFile = () => {
   editorWindow.webContents.send('new-file');
+
+  updateWindowTitle(null);
 };
 
 const appMenuTemplate = [
