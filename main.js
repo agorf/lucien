@@ -1,10 +1,26 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 
 let mainWindow = null;
 
-const createMainWindow = () => {
+const appMenuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Quit',
+        accelerator: 'CommandOrControl+Q',
+        click: app.quit
+      }
+    ]
+  }
+];
+
+const handleAppReady = () => {
+  const appMenu = Menu.buildFromTemplate(appMenuTemplate);
+  Menu.setApplicationMenu(appMenu);
+
   mainWindow = new BrowserWindow();
   mainWindow.loadFile('index.html');
 };
 
-app.on('ready', createMainWindow);
+app.on('ready', handleAppReady);
