@@ -9,6 +9,10 @@ body {
   min-height: 0;
 }
 
+.portrait .body-container {
+  flex-direction: column;
+}
+
 .markdown-wrapper,
 .html-wrapper {
   display: flex;
@@ -16,8 +20,19 @@ body {
   max-width: 50%;
 }
 
+.portrait .markdown-wrapper,
+.portrait .html-wrapper {
+  max-height: 50%;
+  max-width: none;
+}
+
 .markdown-wrapper {
   border-right: 1px solid #ccc;
+}
+
+.portrait .markdown-wrapper {
+  border-bottom: 1px solid #ccc;
+  border-right: none;
 }
 
 .html-wrapper {

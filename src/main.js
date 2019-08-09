@@ -123,7 +123,20 @@ const handleAppReady = () => {
       nodeIntegration: true
     }
   });
-  editorWindow.loadFile(path.resolve(__dirname, 'editor.html'));
+
+  editorWindow
+    .loadFile(path.resolve(__dirname, 'editor.html'))
+    .then(() => {
+      editorWindow.webContents.send('window-resize', editorWindow.getBounds());
+
+      editorWindow.on('resize', () => {
+        editorWindow.webContents.send(
+          'window-resize',
+          editorWindow.getBounds()
+        );
+      });
+    })
+    .catch(console.log);
 };
 
 app.on('ready', handleAppReady);

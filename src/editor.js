@@ -28,6 +28,12 @@ ipcRenderer.on('new-file', () => {
   htmlView.innerHTML = '';
 });
 
+ipcRenderer.on('window-resize', (event, bounds) => {
+  document.body.classList[bounds.width < bounds.height ? 'add' : 'remove'](
+    'portrait'
+  );
+});
+
 markdownView.addEventListener('keyup', ({ target }) => {
   renderMarkdownToHTML(target.value);
 });
