@@ -7,7 +7,8 @@
   "author": "Angelos Orfanakos",
   "license": "MIT",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "lint": "eslint *.js"
   },
   "dependencies": {
     "electron": "^6.0.1"
