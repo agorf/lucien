@@ -25,7 +25,10 @@ const openFileWithDialog = () => {
       defaultPath: app.getPath('documents'),
       properties: ['openFile'],
       filters: [
-        { name: 'Markdown Files', extensions: ['md', 'mkd', 'markdown'] },
+        {
+          name: 'Markdown Files',
+          extensions: ['md', 'mkd', 'mdown', 'markdown']
+        },
         { name: 'Text Files', extensions: ['txt', 'text'] },
         { name: 'All Files', extensions: ['*'] }
       ]
