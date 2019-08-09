@@ -2,7 +2,7 @@ const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-let mainWindow = null;
+let editorWindow = null;
 
 const dialogFilters = [
   {
@@ -20,7 +20,7 @@ const openFile = filePath => {
       return;
     }
 
-    mainWindow.webContents.send('open-file', {
+    editorWindow.webContents.send('open-file', {
       path: filePath,
       data: data.toString()
     });
@@ -74,7 +74,7 @@ exports.saveFileWithDialog = (filePath, data) => {
 };
 
 const newFile = () => {
-  mainWindow.webContents.send('new-file');
+  editorWindow.webContents.send('new-file');
 };
 
 const appMenuTemplate = [
@@ -94,7 +94,7 @@ const appMenuTemplate = [
       {
         label: 'Save',
         accelerator: 'CommandOrControl+S',
-        click: () => mainWindow.webContents.send('save-file')
+        click: () => editorWindow.webContents.send('save-file')
       },
       {
         label: 'Quit',
@@ -118,12 +118,12 @@ const handleAppReady = () => {
   const appMenu = Menu.buildFromTemplate(appMenuTemplate);
   Menu.setApplicationMenu(appMenu);
 
-  mainWindow = new BrowserWindow({
+  editorWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true
     }
   });
-  mainWindow.loadFile(path.resolve(__dirname, 'editor.html'));
+  editorWindow.loadFile(path.resolve(__dirname, 'editor.html'));
 };
 
 app.on('ready', handleAppReady);
