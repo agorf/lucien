@@ -12,7 +12,7 @@ const mainProcess = remote.require('./main');
 
 let openFilePath = null;
 
-ipcRenderer.on('file-opened', (event, { path, data }) => {
+ipcRenderer.on('open-file', (event, { path, data }) => {
   openFilePath = path;
   markdownView.value = data;
   renderMarkdownToHTML(data);

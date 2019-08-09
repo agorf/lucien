@@ -11,7 +11,7 @@ const openFile = filePath => {
       return;
     }
 
-    mainWindow.webContents.send('file-opened', {
+    mainWindow.webContents.send('open-file', {
       path: filePath,
       data: data.toString()
     });
