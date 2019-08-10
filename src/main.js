@@ -160,6 +160,7 @@ const appMenuTemplate = [
       }
     ]
   },
+  { role: 'editMenu' },
   {
     label: 'Tools',
     submenu: [
