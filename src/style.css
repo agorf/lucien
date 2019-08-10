@@ -47,7 +47,7 @@ body {
 .markdown-view {
   border: none;
   flex: 1;
-  font-family: monospace;
+  font-family: Hack, monospace;
   font-size: 1.9em;
   line-height: 1.5;
   outline: none;
@@ -55,7 +55,7 @@ body {
 }
 
 .html-view {
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1em;
   padding: 1em;
 }
