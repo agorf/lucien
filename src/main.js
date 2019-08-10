@@ -38,12 +38,13 @@ if (!app.isPackaged) argv.shift(); // Drop path in development
 
 const updateWindowTitle = () => {
   let title = appName;
-  const dirtyPrefix = fileState.isDirty ? '• ' : '';
 
   if (fileState.path) {
-    title = `${dirtyPrefix}${path.basename(fileState.path)} - ${title}`;
-  } else {
-    title = `${dirtyPrefix}${title}`;
+    title = `${path.basename(fileState.path)} - ${title}`;
+  }
+
+  if (fileState.isDirty) {
+    title = `${title} (Unsaved changes)`;
   }
 
   editorWindow.setTitle(title);
