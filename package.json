@@ -12,6 +12,7 @@
     "lint": "eslint src/*.js"
   },
   "dependencies": {
+    "about-window": "^1.13.1",
     "electron": "^6.0.1",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.9",

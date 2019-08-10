@@ -23,6 +23,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.15.tgz#e8f7729b631be1b02ae130ff0b61f3e018000640"
   integrity sha512-CBR5avlLcu0YCILJiDIXeU2pTw7UK/NIxfC63m7d7CVamho1qDEzXKkOtEauQRPMy6MI8mLozth+JJkas7HY6g==
 
+about-window@^1.13.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/about-window/-/about-window-1.13.1.tgz#a81401aa8c27155c9541aaa16408104cdaeb0a25"
+  integrity sha512-1gkTfnpGWh3xmPqrkJoe2Ya7lbIFGXG+/UZ8XAYQiEsnDLjF9nWSZXw5ApBpFRd3hUx0koN5uFd6hhbEB8InJQ==
+
 acorn-jsx@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.0.1.tgz#32a064fd925429216a09b141102bfdd185fae40e"
