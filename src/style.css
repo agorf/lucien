@@ -52,6 +52,7 @@ body {
   line-height: 1.5;
   outline: none;
   overflow-y: auto;
+  padding: 0.2em;
 }
 
 .html-view {
