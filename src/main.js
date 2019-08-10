@@ -281,9 +281,7 @@ const handleAppReady = () => {
   editorWindow.on('ready-to-show', editorWindow.show);
 };
 
-app.on('ready', handleAppReady);
-
-app.on('before-quit', event => {
+const handleAppBeforeQuit = event => {
   // Do not ask for confirmation to discard changes if the window has been
   // force-closed because we cannot reopen it again.
   // TODO: Ask for confirmation to save or discard changes before quitting
@@ -309,7 +307,11 @@ app.on('before-quit', event => {
 
       return;
   }
-});
+};
+
+app.on('ready', handleAppReady);
+
+app.on('before-quit', handleAppBeforeQuit);
 
 module.exports = {
   console,
