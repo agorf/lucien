@@ -156,6 +156,7 @@ const appMenuTemplate = [
         accelerator: 'CommandOrControl+S',
         click: () => editorWindow.webContents.send('save-file', openFilePath)
       },
+      { type: 'separator' },
       {
         label: 'Quit',
         accelerator: 'CommandOrControl+Q',
