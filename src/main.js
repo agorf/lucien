@@ -28,6 +28,10 @@ const updateWindowTitle = () => {
   editorWindow.setTitle(title);
 };
 
+const updateWindowMenu = () => {
+  Menu.getApplicationMenu().getMenuItemById('save').enabled = isFileDirty;
+};
+
 const setOpenFilePath = value => {
   openFilePath = value;
 
@@ -38,6 +42,7 @@ const setIsFileDirty = value => {
   isFileDirty = value;
 
   updateWindowTitle();
+  updateWindowMenu();
 };
 
 const openFile = filePath => {
@@ -48,6 +53,7 @@ const openFile = filePath => {
     }
 
     setOpenFilePath(filePath);
+    setIsFileDirty(false);
 
     editorWindow.webContents.send('open-file', data.toString());
   });
@@ -127,6 +133,7 @@ const appMenuTemplate = [
         click: openFileWithDialog
       },
       {
+        id: 'save',
         label: 'Save',
         accelerator: 'CommandOrControl+S',
         click: () => editorWindow.webContents.send('save-file', openFilePath)
