@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, Menu } = require('electron');
+const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const openAboutWindow = require('about-window').default;
@@ -165,6 +165,13 @@ const appMenuTemplate = [
   {
     label: 'Help',
     submenu: [
+      {
+        label: 'Markdown spec',
+        click: () => {
+          shell.openExternal('https://github.github.com/gfm/');
+        }
+      },
+      { type: 'separator' },
       {
         label: 'About',
         click: () => {
