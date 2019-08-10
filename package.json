@@ -13,7 +13,8 @@
   "homepage": "https://github.com/agorf/lucien",
   "scripts": {
     "start": "electron .",
-    "lint": "eslint src/*.js"
+    "lint": "eslint src/*.js",
+    "build": "electron-packager . --out=build --overwrite"
   },
   "dependencies": {
     "about-window": "^1.13.1",
