@@ -57,11 +57,12 @@ markdownView.addEventListener('input', ({ target }) => {
 
 htmlView.addEventListener('click', event => {
   const { target } = event;
+  const href = target.getAttribute('href');
 
-  if (target.tagName !== 'A') return;
+  if (target.tagName !== 'A' || href[0] === '#') return;
 
   event.preventDefault();
-  shell.openExternal(target.href);
+  shell.openExternal(href);
 });
 
 let isSyncingMarkdownScroll = false;
