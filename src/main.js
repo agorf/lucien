@@ -213,6 +213,7 @@ app.on('before-quit', event => {
 });
 
 module.exports = {
+  console,
   markFileDirty,
   saveFileWithDialog
 };
