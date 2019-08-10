@@ -30,6 +30,7 @@ const saveChangesDialogButtons = {
 let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
+let defaultDialogPath = app.getPath('documents');
 
 // Clean up command-line arguments
 const argv = [...process.argv];
@@ -67,6 +68,10 @@ const setFileState = newState => {
     updateWindowMenu();
   }
 
+  if (newState.path !== undefined && newState.path !== null) {
+    defaultDialogPath = path.dirname(newState.path);
+  }
+
   return fileState;
 };
 
@@ -102,7 +107,7 @@ const openFileWithDialogUnsafe = () => {
   const [filePath] =
     dialog.showOpenDialogSync(editorWindow, {
       title: 'Open Markdown file',
-      defaultPath: app.getPath('documents'),
+      defaultPath: defaultDialogPath,
       properties: ['openFile'],
       filters: dialogFilters
     }) || [];
@@ -147,7 +152,7 @@ const saveFileWithDialog = () => {
 
     const saveFilePath = dialog.showSaveDialogSync(editorWindow, {
       title: 'Save Markdown file',
-      defaultPath: app.getPath('documents'),
+      defaultPath: defaultDialogPath,
       filters: dialogFilters
     });
 
