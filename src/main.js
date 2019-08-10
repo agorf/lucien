@@ -1,8 +1,8 @@
 const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
+const readPackageJSON = require('read-package-json');
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
-const openAboutWindow = require('about-window').default;
 
 const appName = app.getName();
 
@@ -31,6 +31,16 @@ let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
 let defaultDialogPath = app.getPath('documents');
+let packageJSON = {};
+
+readPackageJSON(
+  path.join(app.getAppPath(), 'package.json'),
+  (error, data) => {
+    if (error) throw new Error(error);
+
+    packageJSON = data;
+  }
+);
 
 // Clean up command-line arguments
 const argv = [...process.argv];
@@ -215,6 +225,33 @@ const exportAsHTMLFileWithDialog = htmlData => {
   });
 };
 
+const showAboutDialog = () => {
+  const message = `${appName} ${app.getVersion()}
+
+Copyright © ${new Date().getFullYear()} Angelos Orfanakos
+
+Licensed under the ${packageJSON.license} license`;
+
+  const clickedButton = dialog.showMessageBoxSync(editorWindow, {
+    type: 'info',
+    buttons: ['Visit website', 'Report issue', 'Close'],
+    defaultId: 2,
+    cancelId: 2,
+    title: `About ${appName}`,
+    message
+  });
+
+  switch (clickedButton) {
+    case 0:
+      shell.openExternal(packageJSON.homepage);
+      break;
+
+    case 1:
+      shell.openExternal(packageJSON.bugs.url);
+      break;
+  }
+};
+
 const editorWindowMenuTemplate = [
   {
     label: '&File',
@@ -263,19 +300,7 @@ const editorWindowMenuTemplate = [
       { type: 'separator' },
       {
         label: 'About',
-        click: () => {
-          openAboutWindow({
-            icon_path: path.join(__dirname, 'icon.png'),
-            copyright: `Copyright © ${new Date().getFullYear()} Angelos Orfanakos`,
-            win_options: {
-              parent: editorWindow,
-              modal: true
-            },
-            adjust_window_size: true,
-            use_version_info: false,
-            show_close_button: 'Close'
-          });
-        }
+        click: showAboutDialog
       }
     ]
   }

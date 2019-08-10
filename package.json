@@ -17,12 +17,12 @@
     "build": "electron-packager . --out=build --overwrite"
   },
   "dependencies": {
-    "about-window": "^1.13.1",
     "electron": "^6.0.1",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.9",
     "lodash": "^4.17.15",
-    "marked": "^0.7.0"
+    "marked": "^0.7.0",
+    "read-package-json": "^2.0.13"
   },
   "devDependencies": {
     "electron-packager": "^14.0.4",
