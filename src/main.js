@@ -45,6 +45,20 @@ const setIsFileDirty = value => {
   updateWindowMenu();
 };
 
+const shouldDiscardChanges = () => {
+  return (
+    !isFileDirty ||
+    dialog.showMessageBoxSync({
+      type: 'question',
+      buttons: ['OK', 'Cancel'],
+      defaultId: 1,
+      title: 'Discard changes?',
+      message: 'This will discard current changes. Are you sure?',
+      cancelId: 1
+    }) === 0
+  );
+};
+
 const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
     if (error) {
@@ -60,6 +74,8 @@ const openFile = filePath => {
 };
 
 const openFileWithDialog = () => {
+  if (!shouldDiscardChanges()) return;
+
   dialog
     .showOpenDialog({
       title: 'Open Markdown file',
@@ -109,7 +125,10 @@ exports.saveFileWithDialog = (filePath, data) => {
 };
 
 const newFile = () => {
+  if (!shouldDiscardChanges()) return;
+
   setOpenFilePath(null);
+  setIsFileDirty(false);
 
   editorWindow.webContents.send('new-file');
 };
@@ -182,3 +201,12 @@ const handleAppReady = () => {
 };
 
 app.on('ready', handleAppReady);
+
+app.on('before-quit', event => {
+  // Do not ask for confirmation to discard changes if the window has been
+  // force-closed because we cannot reopen it again.
+  // TODO: Ask for confirmation to save changes before quitting instead.
+  if (!editorWindow.isVisible()) return;
+
+  if (!shouldDiscardChanges()) event.preventDefault();
+});
