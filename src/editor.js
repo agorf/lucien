@@ -1,4 +1,4 @@
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer, remote, shell } = require('electron');
 const marked = require('marked');
 const lodash = require('lodash');
 const hljs = require('highlight.js');
@@ -50,6 +50,15 @@ ipcRenderer.on('window-resize', (event, bounds) => {
 markdownView.addEventListener('input', ({ target }) => {
   mainProcess.setIsFileDirty(true);
   renderMarkdownToHTML(target.value);
+});
+
+htmlView.addEventListener('click', event => {
+  const { target } = event;
+
+  if (target.tagName !== 'A') return;
+
+  event.preventDefault();
+  shell.openExternal(target.href);
 });
 
 let isSyncingMarkdownScroll = false;
