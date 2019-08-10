@@ -1,6 +1,7 @@
 const { ipcRenderer, remote } = require('electron');
 const marked = require('marked');
 const lodash = require('lodash');
+const hljs = require('highlight.js');
 
 const mainProcess = remote.require('./main');
 
@@ -10,7 +11,8 @@ const htmlWrapper = document.querySelector('.html-wrapper');
 
 const renderMarkdownToHTML = markdown => {
   htmlView.innerHTML = marked(markdown, {
-    smartypants: true
+    smartypants: true,
+    highlight: code => hljs.highlightAuto(code).value
   });
 };
 
