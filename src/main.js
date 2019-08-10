@@ -161,15 +161,7 @@ const appMenuTemplate = [
     ]
   },
   { role: 'editMenu' },
-  {
-    label: 'Tools',
-    submenu: [
-      {
-        label: 'Toggle DevTools',
-        role: 'toggleDevTools'
-      }
-    ]
-  }
+  { role: 'viewMenu' }
 ];
 
 const handleAppReady = () => {
