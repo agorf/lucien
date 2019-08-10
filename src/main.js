@@ -5,20 +5,12 @@ const process = require('process');
 const openAboutWindow = require('about-window').default;
 
 const appName = app.getName();
+
 const initialFileState = {
   path: null,
   data: '',
   isDirty: false
 };
-
-let editorWindow = null;
-let editorWindowMenu = null;
-let fileState = { ...initialFileState };
-
-// Clean up command-line arguments
-const argv = [...process.argv];
-argv.shift();
-if (!app.isPackaged) argv.shift(); // Drop path in development
 
 const dialogFilters = [
   {
@@ -34,6 +26,15 @@ const saveChangesDialogButtons = {
   Cancel: 1,
   Save: 2
 };
+
+let editorWindow = null;
+let editorWindowMenu = null;
+let fileState = { ...initialFileState };
+
+// Clean up command-line arguments
+const argv = [...process.argv];
+argv.shift();
+if (!app.isPackaged) argv.shift(); // Drop path in development
 
 const updateWindowTitle = () => {
   let title = appName;
