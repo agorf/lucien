@@ -31,10 +31,6 @@ ipcRenderer.on('open-file', (event, data) => {
   markdownView.focus();
 });
 
-ipcRenderer.on('save-file', (event, filePath) => {
-  mainProcess.saveFileWithDialog(filePath, markdownView.value);
-});
-
 ipcRenderer.on('new-file', () => {
   markdownView.value = '';
   htmlView.innerHTML = '';
@@ -49,6 +45,7 @@ ipcRenderer.on('window-resize', (event, bounds) => {
 
 markdownView.addEventListener('input', ({ target }) => {
   mainProcess.setIsFileDirty(true);
+  mainProcess.setOpenFileData(target.value);
   renderMarkdownToHTML(target.value);
 });
 

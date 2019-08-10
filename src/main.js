@@ -7,8 +7,9 @@ const appName = app.getName();
 
 let editorWindow = null;
 let editorWindowMenu = null;
-let openFilePath = null;
 let isFileDirty = false;
+let openFilePath = null;
+let openFileData = '';
 
 const dialogFilters = [
   {
@@ -18,6 +19,12 @@ const dialogFilters = [
   { name: 'Text Files', extensions: ['txt', 'text'] },
   { name: 'All Files', extensions: ['*'] }
 ];
+
+const saveChangesDialogButtons = {
+  Discard: 0,
+  Cancel: 1,
+  Save: 2
+};
 
 const updateWindowTitle = () => {
   let title = appName;
@@ -42,6 +49,10 @@ const setOpenFilePath = value => {
   updateWindowTitle();
 };
 
+const setOpenFileData = value => {
+  openFileData = value;
+};
+
 const setIsFileDirty = value => {
   isFileDirty = value;
 
@@ -49,90 +60,125 @@ const setIsFileDirty = value => {
   updateWindowMenu();
 };
 
-const shouldDiscardChanges = () => {
-  return (
-    !isFileDirty ||
-    dialog.showMessageBoxSync(editorWindow, {
-      type: 'question',
-      buttons: ['OK', 'Cancel'],
-      defaultId: 1,
-      title: 'Discard changes?',
-      message: 'This will discard current changes. Are you sure?',
-      cancelId: 1
-    }) === 0
-  );
+const showSaveChangesDialog = () => {
+  if (!isFileDirty) return 0; // "Discard" non-existent changes
+
+  return dialog.showMessageBoxSync(editorWindow, {
+    type: 'question',
+    buttons: Object.keys(saveChangesDialogButtons),
+    defaultId: saveChangesDialogButtons.Save,
+    cancelId: saveChangesDialogButtons.Cancel,
+    title: 'Save changes?',
+    message: 'Save changes before closing?'
+  });
 };
 
 const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
     if (error) throw new Error(error);
 
-    setOpenFilePath(filePath);
     setIsFileDirty(false);
+    setOpenFilePath(filePath);
+    setOpenFileData(data.toString());
 
-    editorWindow.webContents.send('open-file', data.toString());
+    editorWindow.webContents.send('open-file', openFileData);
   });
 };
 
-const openFileWithDialog = () => {
-  if (!shouldDiscardChanges()) return;
-
-  dialog
-    .showOpenDialog(editorWindow, {
+// Discards changes!
+const openFileWithDialogUnsafe = () => {
+  const [filePath] =
+    dialog.showOpenDialogSync(editorWindow, {
       title: 'Open Markdown file',
       defaultPath: app.getPath('documents'),
       properties: ['openFile'],
       filters: dialogFilters
-    })
-    .then(({ canceled, filePaths }) => {
-      if (canceled) return;
+    }) || [];
 
-      openFile(filePaths[0]);
-    })
-    .catch(error => {
-      throw new Error(error);
-    });
+  if (!filePath) return; // Canceled
+
+  openFile(filePath);
 };
 
-const saveFile = (filePath, data) => {
-  fs.writeFile(filePath, data, error => {
-    if (error) throw new Error(error);
+const openFileWithDialog = () => {
+  switch (showSaveChangesDialog()) {
+    case saveChangesDialogButtons.Discard:
+      openFileWithDialogUnsafe();
+      return;
 
-    setOpenFilePath(filePath);
-    setIsFileDirty(false);
-  });
-};
+    case saveChangesDialogButtons.Cancel:
+      return;
 
-const saveFileWithDialog = (filePath, data) => {
-  if (filePath) {
-    saveFile(filePath, data);
-    return;
+    case saveChangesDialogButtons.Save:
+      saveFileWithDialog()
+        .then(openFileWithDialogUnsafe)
+        .catch(error => {
+          throw new Error(error);
+        });
+      return;
   }
+};
 
-  // Saving a new file
-  dialog
-    .showSaveDialog(editorWindow, {
+const saveFileWithDialog = () => {
+  return new Promise((resolve, reject) => {
+    if (openFilePath) {
+      fs.writeFile(openFilePath, openFileData, error => {
+        if (error) {
+          reject(error);
+        } else {
+          setIsFileDirty(false);
+          resolve();
+        }
+      });
+      return;
+    }
+
+    const saveFilePath = dialog.showSaveDialogSync(editorWindow, {
       title: 'Save Markdown file',
       defaultPath: app.getPath('documents'),
       filters: dialogFilters
-    })
-    .then(({ canceled, filePath }) => {
-      if (canceled) return;
-
-      saveFile(filePath, data);
-    })
-    .catch(error => {
-      throw new Error(error);
     });
+
+    if (!saveFilePath) return; // Canceled
+
+    fs.writeFile(saveFilePath, openFileData, error => {
+      if (error) {
+        reject(error);
+      } else {
+        setIsFileDirty(false);
+        setOpenFilePath(saveFilePath);
+        resolve();
+      }
+    });
+  });
+};
+
+// Discards changes!
+const newFileUnsafe = () => {
+  setIsFileDirty(false);
+  setOpenFilePath(null);
+  setOpenFileData('');
+
+  editorWindow.webContents.send('new-file');
 };
 
 const newFile = () => {
-  if (!shouldDiscardChanges()) return;
+  switch (showSaveChangesDialog()) {
+    case saveChangesDialogButtons.Discard:
+      newFileUnsafe();
+      return;
 
-  setOpenFilePath(null);
-  setIsFileDirty(false);
+    case saveChangesDialogButtons.Cancel:
+      return;
 
-  editorWindow.webContents.send('new-file');
+    case saveChangesDialogButtons.Save:
+      saveFileWithDialog()
+        .then(newFileUnsafe)
+        .catch(error => {
+          throw new Error(error);
+        });
+      return;
+  }
 };
 
 const editorWindowMenuTemplate = [
@@ -153,7 +199,7 @@ const editorWindowMenuTemplate = [
         id: 'save',
         label: 'Save',
         accelerator: 'CommandOrControl+S',
-        click: () => editorWindow.webContents.send('save-file', openFilePath)
+        click: saveFileWithDialog
       },
       { type: 'separator' },
       {
@@ -228,14 +274,33 @@ app.on('ready', handleAppReady);
 app.on('before-quit', event => {
   // Do not ask for confirmation to discard changes if the window has been
   // force-closed because we cannot reopen it again.
-  // TODO: Ask for confirmation to save changes before quitting instead.
+  // TODO: Ask for confirmation to save or discard changes before quitting
+  // instead.
   if (!editorWindow.isVisible()) return;
 
-  if (!shouldDiscardChanges()) event.preventDefault();
+  switch (showSaveChangesDialog()) {
+    case saveChangesDialogButtons.Discard:
+      return;
+
+    case saveChangesDialogButtons.Cancel:
+      event.preventDefault();
+      return;
+
+    case saveChangesDialogButtons.Save:
+      event.preventDefault();
+
+      saveFileWithDialog()
+        .then(app.exit)
+        .catch(error => {
+          throw new Error(error);
+        });
+
+      return;
+  }
 });
 
 module.exports = {
   console,
-  saveFileWithDialog,
-  setIsFileDirty
+  setIsFileDirty,
+  setOpenFileData
 };
