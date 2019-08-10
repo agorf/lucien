@@ -180,6 +180,7 @@ const handleAppReady = () => {
   Menu.setApplicationMenu(appMenu);
 
   editorWindow = new BrowserWindow({
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -188,8 +189,6 @@ const handleAppReady = () => {
   editorWindow
     .loadFile(path.resolve(__dirname, 'editor.html'))
     .then(() => {
-      editorWindow.webContents.send('window-resize', editorWindow.getBounds());
-
       editorWindow.on('resize', () => {
         editorWindow.webContents.send(
           'window-resize',
@@ -198,6 +197,8 @@ const handleAppReady = () => {
       });
     })
     .catch(console.log);
+
+  editorWindow.on('ready-to-show', editorWindow.show);
 };
 
 app.on('ready', handleAppReady);
