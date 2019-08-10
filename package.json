@@ -24,6 +24,7 @@
     "marked": "^0.7.0"
   },
   "devDependencies": {
+    "electron-packager": "^14.0.4",
     "eslint": "^6.1.0",
     "prettier": "^1.18.2"
   }
