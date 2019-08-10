@@ -136,7 +136,7 @@ const newFile = () => {
 
 const appMenuTemplate = [
   {
-    label: 'File',
+    label: '&File',
     submenu: [
       {
         label: 'New',
@@ -162,10 +162,10 @@ const appMenuTemplate = [
       }
     ]
   },
-  { role: 'editMenu' },
-  { role: 'viewMenu' },
+  { label: '&Edit', role: 'editMenu' },
+  { label: '&View', role: 'viewMenu' },
   {
-    label: 'Help',
+    label: '&Help',
     submenu: [
       {
         label: 'Markdown spec',
