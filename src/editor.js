@@ -17,12 +17,12 @@ const highlightCode = (code, language) => {
   return hljs.highlight(language, code).value;
 };
 
-const renderMarkdownToHTML = markdown => {
+const renderMarkdownToHTML = lodash.throttle(markdown => {
   htmlView.innerHTML = marked(markdown, {
     smartypants: true,
     highlight: highlightCode
   });
-};
+}, 10);
 
 const syncVerticalScroll = (target, other) => {
   const percentage =
