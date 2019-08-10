@@ -1,5 +1,6 @@
 {
   "name": "lucien",
+  "productName": "Lucien",
   "version": "0.0.1",
   "description": "A Markdown desktop text editor",
   "main": "src/main.js",

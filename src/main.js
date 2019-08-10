@@ -5,7 +5,6 @@ const path = require('path');
 let editorWindow = null;
 let openFilePath = null;
 let isFileDirty = false;
-const appName = 'Lucien';
 
 const dialogFilters = [
   {
@@ -17,7 +16,7 @@ const dialogFilters = [
 ];
 
 const updateWindowTitle = () => {
-  let title = appName;
+  let title = app.getName();
 
   if (openFilePath) {
     title = `${isFileDirty ? '• ' : ''}${path.basename(
