@@ -1,5 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 const marked = require('marked');
+const lodash = require('lodash');
 
 const mainProcess = remote.require('./main');
 
@@ -50,26 +51,32 @@ markdownView.addEventListener('input', ({ target }) => {
 let isSyncingMarkdownScroll = false;
 let isSyncingHTMLScroll = false;
 
-markdownView.addEventListener('scroll', ({ target }) => {
-  if (isSyncingMarkdownScroll) {
-    isSyncingMarkdownScroll = false;
-    return;
-  }
+markdownView.addEventListener(
+  'scroll',
+  lodash.throttle(({ target }) => {
+    if (isSyncingMarkdownScroll) {
+      isSyncingMarkdownScroll = false;
+      return;
+    }
 
-  isSyncingHTMLScroll = true;
-  const otherView = target === markdownView ? htmlWrapper : markdownView;
-  syncVerticalScroll(target, otherView);
-});
+    isSyncingHTMLScroll = true;
+    const otherView = target === markdownView ? htmlWrapper : markdownView;
+    syncVerticalScroll(target, otherView);
+  }, 10)
+);
 
-htmlWrapper.addEventListener('scroll', ({ target }) => {
-  if (isSyncingHTMLScroll) {
-    isSyncingHTMLScroll = false;
-    return;
-  }
+htmlWrapper.addEventListener(
+  'scroll',
+  lodash.throttle(({ target }) => {
+    if (isSyncingHTMLScroll) {
+      isSyncingHTMLScroll = false;
+      return;
+    }
 
-  isSyncingMarkdownScroll = true;
-  const otherView = target === markdownView ? htmlWrapper : markdownView;
-  syncVerticalScroll(target, otherView);
-});
+    isSyncingMarkdownScroll = true;
+    const otherView = target === markdownView ? htmlWrapper : markdownView;
+    syncVerticalScroll(target, otherView);
+  }, 10)
+);
 
 markdownView.focus();
