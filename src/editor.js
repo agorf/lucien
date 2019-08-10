@@ -9,7 +9,9 @@ const htmlView = document.querySelector('.html-view');
 const htmlWrapper = document.querySelector('.html-wrapper');
 
 const renderMarkdownToHTML = markdown => {
-  htmlView.innerHTML = marked(markdown);
+  htmlView.innerHTML = marked(markdown, {
+    smartypants: true
+  });
 };
 
 const syncVerticalScroll = (target, other) => {
