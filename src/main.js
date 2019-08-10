@@ -1,6 +1,7 @@
 const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 const openAboutWindow = require('about-window').default;
 
 const appName = app.getName();
@@ -13,6 +14,11 @@ const initialFileState = {
 let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
+
+// Clean up command-line arguments
+const argv = [...process.argv];
+argv.shift();
+if (!app.isPackaged) argv.shift(); // Drop path in development
 
 const dialogFilters = [
   {
@@ -257,6 +263,10 @@ const handleAppReady = () => {
   editorWindow
     .loadFile(path.join(__dirname, 'editor.html'))
     .then(() => {
+      if (argv.length === 1) {
+        openFile(argv[0]);
+      }
+
       editorWindow.on('resize', () => {
         editorWindow.webContents.send(
           'window-resize',
