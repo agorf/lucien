@@ -63,10 +63,7 @@ const shouldDiscardChanges = () => {
 
 const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
+    if (error) throw new Error(error);
 
     setOpenFilePath(filePath);
     setIsFileDirty(false);
@@ -90,15 +87,14 @@ const openFileWithDialog = () => {
 
       openFile(filePaths[0]);
     })
-    .catch(console.log);
+    .catch(error => {
+      throw new Error(error);
+    });
 };
 
 const saveFile = (filePath, data) => {
   fs.writeFile(filePath, data, error => {
-    if (error) {
-      console.log(error);
-      return;
-    }
+    if (error) throw new Error(error);
 
     setOpenFilePath(filePath);
     setIsFileDirty(false);
@@ -123,7 +119,9 @@ const saveFileWithDialog = (filePath, data) => {
 
       saveFile(filePath, data);
     })
-    .catch(console.log);
+    .catch(error => {
+      throw new Error(error);
+    });
 };
 
 const newFile = () => {
@@ -216,7 +214,9 @@ const handleAppReady = () => {
         );
       });
     })
-    .catch(console.log);
+    .catch(error => {
+      throw new Error(error);
+    });
 
   editorWindow.on('ready-to-show', editorWindow.show);
 };
