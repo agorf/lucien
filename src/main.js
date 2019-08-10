@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 let editorWindow = null;
+let openFilePath = null;
+let isFileDirty = false;
 const appName = 'Lucien';
 
 const dialogFilters = [
@@ -14,14 +16,28 @@ const dialogFilters = [
   { name: 'All Files', extensions: ['*'] }
 ];
 
-const updateWindowTitle = filePath => {
+const updateWindowTitle = () => {
   let title = appName;
 
-  if (filePath) {
-    title = `${path.basename(filePath)} - ${title}`;
+  if (openFilePath) {
+    title = `${isFileDirty ? '• ' : ''}${path.basename(
+      openFilePath
+    )} - ${title}`;
   }
 
   editorWindow.setTitle(title);
+};
+
+const setOpenFilePath = value => {
+  openFilePath = value;
+
+  updateWindowTitle();
+};
+
+const setIsFileDirty = value => {
+  isFileDirty = value;
+
+  updateWindowTitle();
 };
 
 const openFile = filePath => {
@@ -31,12 +47,9 @@ const openFile = filePath => {
       return;
     }
 
-    editorWindow.webContents.send('open-file', {
-      path: filePath,
-      data: data.toString()
-    });
+    setOpenFilePath(filePath);
 
-    updateWindowTitle(filePath);
+    editorWindow.webContents.send('open-file', data.toString());
   });
 };
 
@@ -63,7 +76,8 @@ const saveFile = (filePath, data) => {
       return;
     }
 
-    updateWindowTitle(filePath);
+    setOpenFilePath(filePath);
+    setIsFileDirty(false);
   });
 };
 
@@ -89,9 +103,13 @@ exports.saveFileWithDialog = (filePath, data) => {
 };
 
 const newFile = () => {
-  editorWindow.webContents.send('new-file');
+  setOpenFilePath(null);
 
-  updateWindowTitle(null);
+  editorWindow.webContents.send('new-file');
+};
+
+exports.markFileDirty = () => {
+  setIsFileDirty(true);
 };
 
 const appMenuTemplate = [
@@ -111,7 +129,7 @@ const appMenuTemplate = [
       {
         label: 'Save',
         accelerator: 'CommandOrControl+S',
-        click: () => editorWindow.webContents.send('save-file')
+        click: () => editorWindow.webContents.send('save-file', openFilePath)
       },
       {
         label: 'Quit',

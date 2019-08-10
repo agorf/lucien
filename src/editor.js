@@ -10,21 +10,17 @@ const renderMarkdownToHTML = markdown => {
 
 const mainProcess = remote.require('./main');
 
-let openFilePath = null;
-
-ipcRenderer.on('open-file', (event, { path, data }) => {
-  openFilePath = path;
+ipcRenderer.on('open-file', (event, data) => {
   markdownView.value = data;
   renderMarkdownToHTML(data);
   markdownView.focus();
 });
 
-ipcRenderer.on('save-file', () => {
-  mainProcess.saveFileWithDialog(openFilePath, markdownView.value);
+ipcRenderer.on('save-file', (event, filePath) => {
+  mainProcess.saveFileWithDialog(filePath, markdownView.value);
 });
 
 ipcRenderer.on('new-file', () => {
-  openFilePath = null;
   markdownView.value = '';
   htmlView.innerHTML = '';
   markdownView.focus();
@@ -36,7 +32,8 @@ ipcRenderer.on('window-resize', (event, bounds) => {
   );
 });
 
-markdownView.addEventListener('keyup', ({ target }) => {
+markdownView.addEventListener('input', ({ target }) => {
+  mainProcess.markFileDirty();
   renderMarkdownToHTML(target.value);
 });
 
