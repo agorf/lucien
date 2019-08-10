@@ -27,11 +27,11 @@ body {
 }
 
 .markdown-wrapper {
-  border-right: 1px solid #ccc;
+  border-right: 2px solid #ccc;
 }
 
 .portrait .markdown-wrapper {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
   border-right: none;
 }
 
