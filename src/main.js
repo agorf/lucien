@@ -184,7 +184,7 @@ const handleAppReady = () => {
   });
 
   editorWindow
-    .loadFile(path.resolve(__dirname, 'editor.html'))
+    .loadFile(path.join(__dirname, 'editor.html'))
     .then(() => {
       editorWindow.on('resize', () => {
         editorWindow.webContents.send(
