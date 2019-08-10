@@ -103,7 +103,7 @@ const saveFile = (filePath, data) => {
   });
 };
 
-exports.saveFileWithDialog = (filePath, data) => {
+const saveFileWithDialog = (filePath, data) => {
   if (filePath) {
     saveFile(filePath, data);
     return;
@@ -133,7 +133,7 @@ const newFile = () => {
   editorWindow.webContents.send('new-file');
 };
 
-exports.markFileDirty = () => {
+const markFileDirty = () => {
   setIsFileDirty(true);
 };
 
@@ -211,3 +211,8 @@ app.on('before-quit', event => {
 
   if (!shouldDiscardChanges()) event.preventDefault();
 });
+
+module.exports = {
+  markFileDirty,
+  saveFileWithDialog
+};
