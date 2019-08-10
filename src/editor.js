@@ -48,7 +48,7 @@ ipcRenderer.on('window-resize', (event, bounds) => {
 });
 
 markdownView.addEventListener('input', ({ target }) => {
-  mainProcess.markFileDirty();
+  mainProcess.setIsFileDirty(true);
   renderMarkdownToHTML(target.value);
 });
 

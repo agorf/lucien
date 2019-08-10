@@ -132,10 +132,6 @@ const newFile = () => {
   editorWindow.webContents.send('new-file');
 };
 
-const markFileDirty = () => {
-  setIsFileDirty(true);
-};
-
 const appMenuTemplate = [
   {
     label: 'File',
@@ -214,6 +210,6 @@ app.on('before-quit', event => {
 
 module.exports = {
   console,
-  markFileDirty,
-  saveFileWithDialog
+  saveFileWithDialog,
+  setIsFileDirty
 };
