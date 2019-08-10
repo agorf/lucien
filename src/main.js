@@ -47,7 +47,7 @@ const setIsFileDirty = value => {
 const shouldDiscardChanges = () => {
   return (
     !isFileDirty ||
-    dialog.showMessageBoxSync({
+    dialog.showMessageBoxSync(editorWindow, {
       type: 'question',
       buttons: ['OK', 'Cancel'],
       defaultId: 1,
@@ -76,7 +76,7 @@ const openFileWithDialog = () => {
   if (!shouldDiscardChanges()) return;
 
   dialog
-    .showOpenDialog({
+    .showOpenDialog(editorWindow, {
       title: 'Open Markdown file',
       defaultPath: app.getPath('documents'),
       properties: ['openFile'],
@@ -110,7 +110,7 @@ const saveFileWithDialog = (filePath, data) => {
 
   // Saving a new file
   dialog
-    .showSaveDialog({
+    .showSaveDialog(editorWindow, {
       title: 'Save Markdown file',
       defaultPath: app.getPath('documents'),
       filters: dialogFilters
