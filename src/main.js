@@ -52,6 +52,8 @@ const updateWindowTitle = () => {
 
 const updateWindowMenu = () => {
   editorWindowMenu.getMenuItemById('save').enabled = fileState.isDirty;
+  editorWindowMenu.getMenuItemById('export-as-html').enabled =
+    fileState.data.length > 0;
 };
 
 const setFileState = newState => {
@@ -61,7 +63,7 @@ const setFileState = newState => {
     updateWindowTitle();
   }
 
-  if (newState.isDirty !== undefined) {
+  if (newState.data !== undefined || newState.isDirty !== undefined) {
     updateWindowMenu();
   }
 
@@ -191,6 +193,23 @@ const newFile = () => {
   }
 };
 
+const exportAsHTMLFileWithDialog = htmlData => {
+  const saveFilePath = dialog.showSaveDialogSync(editorWindow, {
+    title: 'Export Markdown file as HTML',
+    defaultPath: app.getPath('documents'),
+    filters: [
+      { name: 'HTML Files', extensions: ['html', 'htm'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  });
+
+  if (!saveFilePath) return; // Canceled
+
+  fs.writeFile(saveFilePath, htmlData, error => {
+    if (error) throw new Error(error);
+  });
+};
+
 const editorWindowMenuTemplate = [
   {
     label: '&File',
@@ -210,6 +229,12 @@ const editorWindowMenuTemplate = [
         label: 'Save',
         accelerator: 'CommandOrControl+S',
         click: saveFileWithDialog
+      },
+      { type: 'separator' },
+      {
+        id: 'export-as-html',
+        label: 'Export as HTML',
+        click: () => editorWindow.webContents.send('export-as-html')
       },
       { type: 'separator' },
       {
@@ -317,5 +342,6 @@ app.on('before-quit', handleAppBeforeQuit);
 
 module.exports = {
   console,
+  exportAsHTMLFileWithDialog,
   setFileState
 };

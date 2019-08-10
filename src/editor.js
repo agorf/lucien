@@ -43,6 +43,10 @@ ipcRenderer.on('window-resize', (event, bounds) => {
   );
 });
 
+ipcRenderer.on('export-as-html', () => {
+  mainProcess.exportAsHTMLFileWithDialog(htmlView.innerHTML);
+});
+
 markdownView.addEventListener('input', ({ target }) => {
   mainProcess.setFileState({
     data: target.value,
