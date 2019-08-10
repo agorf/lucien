@@ -1,14 +1,24 @@
 const { ipcRenderer, remote } = require('electron');
 const marked = require('marked');
 
+const mainProcess = remote.require('./main');
+
 const markdownView = document.querySelector('.markdown-view');
 const htmlView = document.querySelector('.html-view');
+const htmlWrapper = document.querySelector('.html-wrapper');
 
 const renderMarkdownToHTML = markdown => {
   htmlView.innerHTML = marked(markdown);
 };
 
-const mainProcess = remote.require('./main');
+const syncVerticalScroll = (target, other) => {
+  const percentage =
+    target.scrollTop / (target.scrollHeight - target.offsetHeight);
+
+  other.scrollTop = Math.round(
+    percentage * (other.scrollHeight - other.offsetHeight)
+  );
+};
 
 ipcRenderer.on('open-file', (event, data) => {
   markdownView.value = data;
@@ -35,6 +45,31 @@ ipcRenderer.on('window-resize', (event, bounds) => {
 markdownView.addEventListener('input', ({ target }) => {
   mainProcess.markFileDirty();
   renderMarkdownToHTML(target.value);
+});
+
+let isSyncingMarkdownScroll = false;
+let isSyncingHTMLScroll = false;
+
+markdownView.addEventListener('scroll', ({ target }) => {
+  if (isSyncingMarkdownScroll) {
+    isSyncingMarkdownScroll = false;
+    return;
+  }
+
+  isSyncingHTMLScroll = true;
+  const otherView = target === markdownView ? htmlWrapper : markdownView;
+  syncVerticalScroll(target, otherView);
+});
+
+htmlWrapper.addEventListener('scroll', ({ target }) => {
+  if (isSyncingHTMLScroll) {
+    isSyncingHTMLScroll = false;
+    return;
+  }
+
+  isSyncingMarkdownScroll = true;
+  const otherView = target === markdownView ? htmlWrapper : markdownView;
+  syncVerticalScroll(target, otherView);
 });
 
 markdownView.focus();
