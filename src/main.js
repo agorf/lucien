@@ -21,10 +21,12 @@ const dialogFilters = [
 
 const updateWindowTitle = () => {
   let title = appName;
+  const dirtyPrefix = isFileDirty ? '• ' : '';
 
   if (openFilePath) {
-    const dirtyPrefix = isFileDirty ? '• ' : '';
     title = `${dirtyPrefix}${path.basename(openFilePath)} - ${title}`;
+  } else {
+    title = `${dirtyPrefix}${title}`;
   }
 
   editorWindow.setTitle(title);
