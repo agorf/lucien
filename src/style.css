@@ -2,6 +2,7 @@
 @import '../node_modules/highlight.js/styles/github.css';
 
 body {
+  font-size: 62.5%;
   height: 100vh;
   margin: 0;
 }
@@ -39,7 +40,7 @@ body {
 }
 
 .html-wrapper {
-  font-size: 1.6em;
+  font-size: 1.9em;
   overflow-y: auto;
 }
 
@@ -47,7 +48,7 @@ body {
   border: none;
   flex: 1;
   font-family: monospace;
-  font-size: 1.6em;
+  font-size: 1.9em;
   line-height: 1.5;
   outline: none;
   overflow-y: auto;
