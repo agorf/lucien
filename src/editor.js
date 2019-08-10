@@ -9,10 +9,18 @@ const markdownView = document.querySelector('.markdown-view');
 const htmlView = document.querySelector('.html-view');
 const htmlWrapper = document.querySelector('.html-wrapper');
 
+const highlightCode = (code, language) => {
+  if (language.length === 0 || /no(-?)highlight|plain|text/.test(language)) {
+    return code;
+  }
+
+  return hljs.highlight(language, code).value;
+};
+
 const renderMarkdownToHTML = markdown => {
   htmlView.innerHTML = marked(markdown, {
     smartypants: true,
-    highlight: code => hljs.highlightAuto(code).value
+    highlight: highlightCode
   });
 };
 
