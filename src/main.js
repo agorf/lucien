@@ -20,9 +20,8 @@ const updateWindowTitle = () => {
   let title = app.getName();
 
   if (openFilePath) {
-    title = `${isFileDirty ? '• ' : ''}${path.basename(
-      openFilePath
-    )} - ${title}`;
+    const dirtyPrefix = isFileDirty ? '• ' : '';
+    title = `${dirtyPrefix}${path.basename(openFilePath)} - ${title}`;
   }
 
   editorWindow.setTitle(title);
