@@ -6,6 +6,7 @@ const openAboutWindow = require('about-window').default;
 const appName = app.getName();
 
 let editorWindow = null;
+let editorWindowMenu = null;
 let openFilePath = null;
 let isFileDirty = false;
 
@@ -30,7 +31,7 @@ const updateWindowTitle = () => {
 };
 
 const updateWindowMenu = () => {
-  Menu.getApplicationMenu().getMenuItemById('save').enabled = isFileDirty;
+  editorWindowMenu.getMenuItemById('save').enabled = isFileDirty;
 };
 
 const setOpenFilePath = value => {
@@ -134,7 +135,7 @@ const newFile = () => {
   editorWindow.webContents.send('new-file');
 };
 
-const appMenuTemplate = [
+const editorWindowMenuTemplate = [
   {
     label: '&File',
     submenu: [
@@ -195,15 +196,15 @@ const appMenuTemplate = [
 ];
 
 const handleAppReady = () => {
-  const appMenu = Menu.buildFromTemplate(appMenuTemplate);
-  Menu.setApplicationMenu(appMenu);
-
   editorWindow = new BrowserWindow({
     show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
+
+  editorWindowMenu = Menu.buildFromTemplate(editorWindowMenuTemplate);
+  editorWindow.setMenu(editorWindowMenu);
 
   editorWindow
     .loadFile(path.join(__dirname, 'editor.html'))
