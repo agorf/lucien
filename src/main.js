@@ -4,12 +4,15 @@ const path = require('path');
 const openAboutWindow = require('about-window').default;
 
 const appName = app.getName();
+const initialFileState = {
+  path: null,
+  data: '',
+  isDirty: false
+};
 
 let editorWindow = null;
 let editorWindowMenu = null;
-let isFileDirty = false;
-let openFilePath = null;
-let openFileData = '';
+let fileState = { ...initialFileState };
 
 const dialogFilters = [
   {
@@ -28,10 +31,10 @@ const saveChangesDialogButtons = {
 
 const updateWindowTitle = () => {
   let title = appName;
-  const dirtyPrefix = isFileDirty ? '• ' : '';
+  const dirtyPrefix = fileState.isDirty ? '• ' : '';
 
-  if (openFilePath) {
-    title = `${dirtyPrefix}${path.basename(openFilePath)} - ${title}`;
+  if (fileState.path) {
+    title = `${dirtyPrefix}${path.basename(fileState.path)} - ${title}`;
   } else {
     title = `${dirtyPrefix}${title}`;
   }
@@ -40,28 +43,25 @@ const updateWindowTitle = () => {
 };
 
 const updateWindowMenu = () => {
-  editorWindowMenu.getMenuItemById('save').enabled = isFileDirty;
+  editorWindowMenu.getMenuItemById('save').enabled = fileState.isDirty;
 };
 
-const setOpenFilePath = value => {
-  openFilePath = value;
+const setFileState = newState => {
+  fileState = { ...fileState, ...newState };
 
-  updateWindowTitle();
-};
+  if (newState.path !== undefined || newState.isDirty !== undefined) {
+    updateWindowTitle();
+  }
 
-const setOpenFileData = value => {
-  openFileData = value;
-};
+  if (newState.isDirty !== undefined) {
+    updateWindowMenu();
+  }
 
-const setIsFileDirty = value => {
-  isFileDirty = value;
-
-  updateWindowTitle();
-  updateWindowMenu();
+  return fileState;
 };
 
 const showSaveChangesDialog = () => {
-  if (!isFileDirty) return 0; // "Discard" non-existent changes
+  if (!fileState.isDirty) return 0; // "Discard" non-existent changes
 
   return dialog.showMessageBoxSync(editorWindow, {
     type: 'question',
@@ -77,11 +77,13 @@ const openFile = filePath => {
   fs.readFile(filePath, (error, data) => {
     if (error) throw new Error(error);
 
-    setIsFileDirty(false);
-    setOpenFilePath(filePath);
-    setOpenFileData(data.toString());
+    setFileState({
+      path: filePath,
+      data: data.toString(),
+      isDirty: false
+    });
 
-    editorWindow.webContents.send('open-file', openFileData);
+    editorWindow.webContents.send('open-file', fileState.data);
   });
 };
 
@@ -121,12 +123,12 @@ const openFileWithDialog = () => {
 
 const saveFileWithDialog = () => {
   return new Promise((resolve, reject) => {
-    if (openFilePath) {
-      fs.writeFile(openFilePath, openFileData, error => {
+    if (fileState.path) {
+      fs.writeFile(fileState.path, fileState.data, error => {
         if (error) {
           reject(error);
         } else {
-          setIsFileDirty(false);
+          setFileState({ isDirty: false });
           resolve();
         }
       });
@@ -141,12 +143,14 @@ const saveFileWithDialog = () => {
 
     if (!saveFilePath) return; // Canceled
 
-    fs.writeFile(saveFilePath, openFileData, error => {
+    fs.writeFile(saveFilePath, fileState.data, error => {
       if (error) {
         reject(error);
       } else {
-        setIsFileDirty(false);
-        setOpenFilePath(saveFilePath);
+        setFileState({
+          path: saveFilePath,
+          isDirty: false
+        });
         resolve();
       }
     });
@@ -155,9 +159,7 @@ const saveFileWithDialog = () => {
 
 // Discards changes!
 const newFileUnsafe = () => {
-  setIsFileDirty(false);
-  setOpenFilePath(null);
-  setOpenFileData('');
+  setFileState(initialFileState);
 
   editorWindow.webContents.send('new-file');
 };
@@ -301,6 +303,5 @@ app.on('before-quit', event => {
 
 module.exports = {
   console,
-  setIsFileDirty,
-  setOpenFileData
+  setFileState
 };
