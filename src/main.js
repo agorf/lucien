@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const openAboutWindow = require('about-window').default;
 
+const appName = app.getName();
+
 let editorWindow = null;
 let openFilePath = null;
 let isFileDirty = false;
@@ -17,7 +19,7 @@ const dialogFilters = [
 ];
 
 const updateWindowTitle = () => {
-  let title = app.getName();
+  let title = appName;
 
   if (openFilePath) {
     const dirtyPrefix = isFileDirty ? '• ' : '';
