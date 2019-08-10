@@ -2,7 +2,7 @@
   "name": "lucien",
   "productName": "Lucien",
   "version": "0.0.1",
-  "description": "A minimal, cross-platform, desktop Markdown text editor",
+  "description": "Minimal cross-platform Markdown text editor",
   "main": "src/main.js",
   "repository": "https://github.com/agorf/lucien",
   "author": "Angelos Orfanakos",
