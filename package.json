@@ -2,11 +2,15 @@
   "name": "lucien",
   "productName": "Lucien",
   "version": "0.0.1",
-  "description": "A Markdown desktop text editor",
+  "description": "A minimal, cross-platform, desktop Markdown text editor",
   "main": "src/main.js",
   "repository": "https://github.com/agorf/lucien",
   "author": "Angelos Orfanakos",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agorf/lucien/issues"
+  },
+  "homepage": "https://github.com/agorf/lucien",
   "scripts": {
     "start": "electron .",
     "lint": "eslint src/*.js"

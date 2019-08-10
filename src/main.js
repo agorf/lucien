@@ -1,6 +1,7 @@
 const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const openAboutWindow = require('about-window').default;
 
 let editorWindow = null;
 let openFilePath = null;
@@ -161,7 +162,28 @@ const appMenuTemplate = [
     ]
   },
   { role: 'editMenu' },
-  { role: 'viewMenu' }
+  { role: 'viewMenu' },
+  {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'About',
+        click: () => {
+          openAboutWindow({
+            icon_path: path.join(__dirname, 'icon.png'),
+            copyright: `Copyright © ${new Date().getFullYear()} Angelos Orfanakos`,
+            win_options: {
+              parent: editorWindow,
+              modal: true
+            },
+            adjust_window_size: true,
+            use_version_info: false,
+            show_close_button: 'Close'
+          });
+        }
+      }
+    ]
+  }
 ];
 
 const handleAppReady = () => {
