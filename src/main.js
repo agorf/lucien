@@ -1,8 +1,9 @@
 const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
-const readPackageJSON = require('read-package-json');
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
+
+const manifest = require(path.join(app.getAppPath(), 'package.json'));
 
 const appName = app.getName();
 
@@ -31,13 +32,6 @@ let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
 let defaultDialogPath = app.getPath('documents');
-let packageJSON = {};
-
-readPackageJSON(path.join(app.getAppPath(), 'package.json'), (error, data) => {
-  if (error) throw new Error(error);
-
-  packageJSON = data;
-});
 
 // Clean up command-line arguments
 const argv = [...process.argv];
@@ -234,7 +228,7 @@ const showAboutDialog = () => {
 
 Copyright © ${new Date().getFullYear()} Angelos Orfanakos
 
-Licensed under the ${packageJSON.license} license`;
+Licensed under the ${manifest.license} license`;
 
   const clickedButton = dialog.showMessageBoxSync(editorWindow, {
     type: 'info',
@@ -247,11 +241,11 @@ Licensed under the ${packageJSON.license} license`;
 
   switch (clickedButton) {
     case 0:
-      shell.openExternal(packageJSON.homepage);
+      shell.openExternal(manifest.homepage);
       break;
 
     case 1:
-      shell.openExternal(packageJSON.bugs.url);
+      shell.openExternal(manifest.bugs.url);
       break;
   }
 };
@@ -305,11 +299,11 @@ const editorWindowMenuTemplate = [
       { type: 'separator' },
       {
         label: 'Visit website',
-        click: () => shell.openExternal(packageJSON.homepage)
+        click: () => shell.openExternal(manifest.homepage)
       },
       {
         label: 'Report issue',
-        click: () => shell.openExternal(packageJSON.bugs.url)
+        click: () => shell.openExternal(manifest.bugs.url)
       },
       { type: 'separator' },
       {
