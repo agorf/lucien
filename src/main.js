@@ -268,7 +268,7 @@ ${htmlData}
 const showAboutDialog = () => {
   const message = `${appName} ${appVersion}
 
-Copyright © ${new Date().getFullYear()} Angelos Orfanakos
+Copyright © ${new Date().getFullYear()} ${manifest.author}
 
 Licensed under the ${manifest.license} license`;
 
