@@ -7,7 +7,6 @@ const mainProcess = remote.require('./main');
 
 const markdownView = document.querySelector('.markdown-view');
 const htmlView = document.querySelector('.html-view');
-const htmlWrapper = document.querySelector('.html-wrapper');
 
 const highlightCode = (code, language) => {
   if (language.length === 0 || /no(-?)highlight|plain|text/.test(language)) {
@@ -85,11 +84,11 @@ markdownView.addEventListener(
     }
 
     isSyncingHTMLScroll = true;
-    syncVerticalScroll(target, htmlWrapper);
+    syncVerticalScroll(target, htmlView);
   }, 10)
 );
 
-htmlWrapper.addEventListener(
+htmlView.addEventListener(
   'scroll',
   lodash.throttle(({ target }) => {
     if (isSyncingHTMLScroll) {
