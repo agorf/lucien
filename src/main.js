@@ -299,6 +299,15 @@ const editorWindowMenuTemplate = [
       },
       { type: 'separator' },
       {
+        label: 'Visit website',
+        click: () => shell.openExternal(packageJSON.homepage)
+      },
+      {
+        label: 'Report issue',
+        click: () => shell.openExternal(packageJSON.bugs.url)
+      },
+      { type: 'separator' },
+      {
         label: 'About',
         click: showAboutDialog
       }
