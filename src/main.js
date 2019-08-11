@@ -219,6 +219,12 @@ const exportAsHTMLFileWithDialog = htmlData => {
 
   if (!saveFilePath) return; // Canceled
 
+  let title = appName;
+
+  if (fileState.path) {
+    title = `${path.basename(fileState.path)} - ${title}`;
+  }
+
   // TODO: Figure out a way to embed styles without duplicating their filenames
   // here and in editor.html styles. Until this happens, they most probably have
   // to be kept in sync.
@@ -242,7 +248,7 @@ const exportAsHTMLFileWithDialog = htmlData => {
 <head>
 <meta charset="utf-8">
 <meta name="generator" content="${appName} ${appVersion}">
-<title>${path.basename(fileState.path)} - ${appName}</title>
+<title>${title}</title>
 <style>
 ${styles}
 </style>
