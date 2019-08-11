@@ -56,7 +56,9 @@ body {
 }
 
 .html-view {
+  box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
   font-size: 1em;
   padding: 1em;
+  max-width: 100%;
 }
