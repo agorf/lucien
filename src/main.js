@@ -218,7 +218,40 @@ const exportAsHTMLFileWithDialog = htmlData => {
 
   if (!saveFilePath) return; // Canceled
 
-  fs.writeFile(saveFilePath, htmlData, error => {
+  // TODO: Figure out a way to embed styles without duplicating their filenames
+  // here and in editor.html styles. Until this happens, they most probably have
+  // to be kept in sync.
+
+  let styles = fs.readFileSync(
+    path.join(
+      app.getAppPath(),
+      'node_modules/github-markdown-css/github-markdown.css'
+    )
+  );
+
+  styles += fs.readFileSync(
+    path.join(app.getAppPath(), 'node_modules/highlight.js/styles/github.css')
+  );
+
+  styles += fs.readFileSync(path.join(__dirname, 'style.css'));
+
+  const htmlDataWrapped = `
+<!DOCTYPE html>
+<html>
+<head>
+<title>${path.basename(fileState.path)} - ${appName}</title>
+<style>
+${styles}
+</style>
+</head>
+<body>
+<div class="html-view markdown-body">
+${htmlData}
+</div>
+</body>
+</html>`;
+
+  fs.writeFile(saveFilePath, htmlDataWrapped, error => {
     if (error) throw new Error(error);
   });
 };
