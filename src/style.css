@@ -39,10 +39,6 @@ body {
   border-right: none;
 }
 
-.html-wrapper {
-  overflow-y: auto;
-}
-
 .markdown-view {
   border: none;
   flex: 1;
@@ -58,7 +54,7 @@ body {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
   font-size: 1.9em;
-  overflow: auto;
+  overflow-y: auto;
   padding: 1em;
   max-width: 100%;
 }
