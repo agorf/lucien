@@ -284,7 +284,6 @@ const editorWindowMenuTemplate = [
     ]
   },
   { label: '&Edit', role: 'editMenu' },
-  { label: '&View', role: 'viewMenu' },
   {
     label: '&Help',
     submenu: [
@@ -311,6 +310,10 @@ const editorWindowMenuTemplate = [
     ]
   }
 ];
+
+if (!app.isPackaged) {
+  editorWindowMenuTemplate.splice(-1, 0, { label: '&View', role: 'viewMenu' });
+}
 
 const handleAppReady = () => {
   editorWindow = new BrowserWindow({
