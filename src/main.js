@@ -6,6 +6,7 @@ const process = require('process');
 const manifest = require(path.join(app.getAppPath(), 'package.json'));
 
 const appName = app.getName();
+const appVersion = app.getVersion();
 
 const initialFileState = {
   path: null,
@@ -239,6 +240,8 @@ const exportAsHTMLFileWithDialog = htmlData => {
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
+<meta name="generator" content="${appName} ${appVersion}">
 <title>${path.basename(fileState.path)} - ${appName}</title>
 <style>
 ${styles}
@@ -257,7 +260,7 @@ ${htmlData}
 };
 
 const showAboutDialog = () => {
-  const message = `${appName} ${app.getVersion()}
+  const message = `${appName} ${appVersion}
 
 Copyright © ${new Date().getFullYear()} Angelos Orfanakos
 
