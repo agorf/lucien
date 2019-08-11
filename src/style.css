@@ -40,7 +40,6 @@ body {
 }
 
 .html-wrapper {
-  font-size: 1.9em;
   overflow-y: auto;
 }
 
@@ -58,7 +57,7 @@ body {
 .html-view {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
+  font-size: 1.9em;
   padding: 1em;
   max-width: 100%;
 }
