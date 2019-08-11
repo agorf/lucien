@@ -21,8 +21,7 @@
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.9",
     "lodash": "^4.17.15",
-    "marked": "^0.7.0",
-    "read-package-json": "^2.0.13"
+    "marked": "^0.7.0"
   },
   "devDependencies": {
     "electron-packager": "^14.0.4",
