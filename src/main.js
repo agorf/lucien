@@ -101,7 +101,7 @@ const openFile = filePath => {
 
     setFileState({
       path: filePath,
-      data: data.toString(),
+      data: data.toString().replace(/\n$/, ''),
       isDirty: false
     });
 
@@ -143,10 +143,17 @@ const openFileWithDialog = () => {
   }
 };
 
+const saveFile = (path, data, callback = () => {}) => {
+  // Append a new line character if missing
+  if (data.slice(-1) !== '\n') data = `${data}\n`;
+
+  fs.writeFile(path, data, callback);
+};
+
 const saveFileWithDialog = () => {
   return new Promise((resolve, reject) => {
     if (fileState.path) {
-      fs.writeFile(fileState.path, fileState.data, error => {
+      saveFile(fileState.path, fileState.data, error => {
         if (error) {
           reject(error);
         } else {
@@ -165,7 +172,7 @@ const saveFileWithDialog = () => {
 
     if (!saveFilePath) return; // Canceled
 
-    fs.writeFile(saveFilePath, fileState.data, error => {
+    saveFile(saveFilePath, fileState.data, error => {
       if (error) {
         reject(error);
       } else {
