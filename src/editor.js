@@ -85,8 +85,7 @@ markdownView.addEventListener(
     }
 
     isSyncingHTMLScroll = true;
-    const otherView = target === markdownView ? htmlWrapper : markdownView;
-    syncVerticalScroll(target, otherView);
+    syncVerticalScroll(target, htmlWrapper);
   }, 10)
 );
 
@@ -99,8 +98,7 @@ htmlWrapper.addEventListener(
     }
 
     isSyncingMarkdownScroll = true;
-    const otherView = target === markdownView ? htmlWrapper : markdownView;
-    syncVerticalScroll(target, otherView);
+    syncVerticalScroll(target, markdownView);
   }, 10)
 );
 
