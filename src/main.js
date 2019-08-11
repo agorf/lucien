@@ -288,9 +288,11 @@ const editorWindowMenuTemplate = [
     label: '&Help',
     submenu: [
       {
-        label: 'Markdown spec',
+        label: 'Markdown tutorial',
         click: () => {
-          shell.openExternal('https://github.github.com/gfm/');
+          shell.openExternal(
+            'https://github.com/agorf/lucien/blob/master/markdown-tutorial.md'
+          );
         }
       },
       { type: 'separator' },
