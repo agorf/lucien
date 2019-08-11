@@ -33,14 +33,11 @@ let fileState = { ...initialFileState };
 let defaultDialogPath = app.getPath('documents');
 let packageJSON = {};
 
-readPackageJSON(
-  path.join(app.getAppPath(), 'package.json'),
-  (error, data) => {
-    if (error) throw new Error(error);
+readPackageJSON(path.join(app.getAppPath(), 'package.json'), (error, data) => {
+  if (error) throw new Error(error);
 
-    packageJSON = data;
-  }
-);
+  packageJSON = data;
+});
 
 // Clean up command-line arguments
 const argv = [...process.argv];
