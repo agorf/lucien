@@ -399,6 +399,8 @@ const handleAppReady = () => {
   editorWindowMenu = Menu.buildFromTemplate(editorWindowMenuTemplate);
   editorWindow.setMenu(editorWindowMenu);
 
+  updateWindowMenu();
+
   editorWindow
     .loadFile(path.join(__dirname, 'editor.html'))
     .then(() => {
