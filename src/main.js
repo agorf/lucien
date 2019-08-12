@@ -57,6 +57,9 @@ const updateWindowMenu = () => {
   editorWindowMenu.getMenuItemById('save').enabled = fileState.isDirty;
   editorWindowMenu.getMenuItemById('export-as-html').enabled =
     fileState.data.length > 0;
+  editorWindowMenu.getMenuItemById('move-to-trash').enabled = Boolean(
+    fileState.path
+  );
 };
 
 const setFileState = newState => {
@@ -265,6 +268,23 @@ ${htmlData}
   });
 };
 
+const moveFileToTrash = () => {
+  const clickedButton = dialog.showMessageBoxSync(editorWindow, {
+    type: 'question',
+    buttons: ['Delete', 'Cancel'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Move file to trash?',
+    message: 'This will delete the file and any unsaved changes. Are you sure?'
+  });
+
+  if (clickedButton === 1) return; // Canceled
+
+  shell.moveItemToTrash(fileState.path);
+
+  newFileUnsafe();
+};
+
 const showAboutDialog = () => {
   const clickedButton = dialog.showMessageBoxSync(editorWindow, {
     type: 'info',
@@ -323,6 +343,11 @@ const editorWindowMenuTemplate = [
         id: 'export-as-html',
         label: 'Export as HTML',
         click: () => editorWindow.webContents.send('export-as-html')
+      },
+      {
+        id: 'move-to-trash',
+        label: 'Move to Trash',
+        click: moveFileToTrash
       },
       { type: 'separator' },
       {
