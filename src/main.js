@@ -333,6 +333,7 @@ const editorWindowMenuTemplate = [
     ]
   },
   { label: '&Edit', role: 'editMenu' },
+  app.isPackaged ? null : { label: '&View', role: 'viewMenu' },
   {
     label: '&Help',
     submenu: [
@@ -360,11 +361,7 @@ const editorWindowMenuTemplate = [
       }
     ]
   }
-];
-
-if (!app.isPackaged) {
-  editorWindowMenuTemplate.splice(-1, 0, { label: '&View', role: 'viewMenu' });
-}
+].filter(item => item); // Get rid of nulls
 
 const handleAppReady = () => {
   editorWindow = new BrowserWindow({
