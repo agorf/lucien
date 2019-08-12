@@ -3,6 +3,8 @@ const marked = require('marked');
 const lodash = require('lodash');
 const hljs = require('highlight.js');
 
+const syncVerticalScroll = require('./sync-vertical-scroll');
+
 const mainProcess = remote.require('./main');
 
 const markdownView = document.querySelector('.markdown-view');
@@ -22,15 +24,6 @@ const renderMarkdownToHTML = lodash.throttle(markdown => {
     highlight: highlightCode
   });
 }, 10);
-
-const syncVerticalScroll = (target, other) => {
-  const percentage =
-    target.scrollTop / (target.scrollHeight - target.offsetHeight);
-
-  other.scrollTop = Math.round(
-    percentage * (other.scrollHeight - other.offsetHeight)
-  );
-};
 
 ipcRenderer.on('open-file', (event, data) => {
   markdownView.value = data;
@@ -72,33 +65,6 @@ htmlView.addEventListener('click', event => {
   shell.openExternal(href);
 });
 
-let isSyncingMarkdownScroll = false;
-let isSyncingHTMLScroll = false;
-
-markdownView.addEventListener(
-  'scroll',
-  lodash.throttle(({ target }) => {
-    if (isSyncingMarkdownScroll) {
-      isSyncingMarkdownScroll = false;
-      return;
-    }
-
-    isSyncingHTMLScroll = true;
-    syncVerticalScroll(target, htmlView);
-  }, 10)
-);
-
-htmlView.addEventListener(
-  'scroll',
-  lodash.throttle(({ target }) => {
-    if (isSyncingHTMLScroll) {
-      isSyncingHTMLScroll = false;
-      return;
-    }
-
-    isSyncingMarkdownScroll = true;
-    syncVerticalScroll(target, markdownView);
-  }, 10)
-);
+syncVerticalScroll([markdownView, htmlView]);
 
 markdownView.focus();
