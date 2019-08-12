@@ -266,19 +266,25 @@ ${htmlData}
 };
 
 const showAboutDialog = () => {
-  const message = `${appName} ${appVersion}
-
-Copyright © ${new Date().getFullYear()} ${manifest.author}
-
-Licensed under the ${manifest.license} license`;
-
   const clickedButton = dialog.showMessageBoxSync(editorWindow, {
     type: 'info',
     buttons: ['Visit website', 'Report issue', 'Close'],
     defaultId: 2,
     cancelId: 2,
     title: `About ${appName}`,
-    message
+    message: appName,
+    detail: [
+      `Copyright © ${new Date().getFullYear()} ${manifest.author}`,
+      '',
+      `Licensed under the ${manifest.license} license`,
+      '',
+      `Version: ${appVersion}`,
+      `Electron: ${process.versions.electron}`,
+      `Node: ${process.versions.node}`,
+      `V8: ${process.versions.v8}`,
+      `Platform: ${process.platform}`,
+      `Arch: ${process.arch}`
+    ].join('\n')
   });
 
   switch (clickedButton) {
