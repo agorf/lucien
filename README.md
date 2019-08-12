@@ -8,23 +8,23 @@ TODO
 
 ## Features
 
-- Live HTML preview of Markdown text
 - Support for [GitHub Flavored Markdown](https://github.github.com/gfm/)
-- Support for [SmartyPants](https://daringfireball.net/projects/smartypants/) smart punctuation
+- Support for smart punctuation with [SmartyPants](https://daringfireball.net/projects/smartypants/)
+- Split view with Markdown text on the left and the HTML result on the right
 - Code syntax highlighting in HTML view
-- Synchronized scrolling between Markdown and HTML views
-- Automatic vertical/horizontal view splitting when window layout is landscape/portrait
+- Synchronized scrolling between views
+- Automatic view split orientation (horizontal/vertical) based on window layout
 - Export Markdown document to a standalone HTML file
 
 ## Anti-features
 
 Things that have been left out intentionally:
 
-- No toolbar or buttons. Functionality is invoked from the app menu with keyboard shortcuts.
-- No [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) interface, just editing Markdown text
-- No syntax highlighting in Markdown view to keep things less distracting, simple and fast
-- No file browsing/picking from inside the app, just a regular "open file" dialog
-- No tags or categories. Markdown text files can be organized in filesystem directories.
+- No toolbar or buttons. Functionality is invoked from the app menu and through keyboard shortcuts.
+- No [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) interface for Markdown text (button for bold, italics, etc)
+- No syntax highlighting in Markdown view
+- No file browsing, just a regular "open file" dialog
+- No tags or categories. Files may be organized in filesystem directories instead.
 
 ## Installation
 
@@ -66,9 +66,13 @@ If you get an error about sandboxing in Linux, follow its instructions or issue:
 sudo sysctl kernel.unprivileged_userns_clone=1
 ```
 
-To persist this, you have put it (without the `sudo` prefix) in `/etc/sysctl.conf`
+To persist this after a reboot, you have put it (without the `sudo` prefix) in `/etc/sysctl.conf`
 
 ## Use
+
+TODO
+
+### Desktop file
 
 TODO
 
@@ -94,7 +98,7 @@ Pretty standard:
 Pass the path of a single Markdown document to the Lucien executable to edit it:
 
 ```shell
-TODO
+./Lucien /path/to/my-file.md
 ```
 
 ## Acknowledgements
@@ -104,7 +108,6 @@ Lucien was inspired by the following projects and resources:
 - [Notable](https://github.com/notable/notable) (a bit bloated and no longer open-source)
 - [Dillinger](https://dillinger.io/) (web-based)
 - [Steve Kinney's "Electron Fundamentals v2" course](https://frontendmasters.com/courses/electron-v2/)
-- [Steve Kinney's "Electron in Action" book](https://www.manning.com/books/electron-in-action)
 - Lucien, the cat
 
 ## License
