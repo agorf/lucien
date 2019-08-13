@@ -455,7 +455,6 @@ app.on('ready', handleAppReady);
 app.on('before-quit', handleAppBeforeQuit);
 
 module.exports = {
-  console,
   exportAsHTMLFileWithDialog,
   setFileState
 };
