@@ -80,10 +80,18 @@ const setFileState = newState => {
   return fileState;
 };
 
-const showSaveChangesDialog = () => {
-  if (!fileState.isDirty) return 0; // "Discard" non-existent changes
+const showSaveChangesDialog = ({
+  onDiscard = () => {},
+  onCancel = () => {},
+  onSave = () => {}
+} = {}) => {
+  if (!fileState.isDirty) {
+    // "Discard" non-existent changes
+    onDiscard();
+    return;
+  }
 
-  return dialog.showMessageBoxSync(editorWindow, {
+  const clickedButton = dialog.showMessageBoxSync(editorWindow, {
     type: 'question',
     buttons: Object.keys(saveChangesDialogButtons),
     defaultId: saveChangesDialogButtons.Save,
@@ -91,6 +99,20 @@ const showSaveChangesDialog = () => {
     title: 'Save changes?',
     message: 'Save changes before closing?'
   });
+
+  switch (clickedButton) {
+    case saveChangesDialogButtons.Discard:
+      onDiscard();
+      return;
+
+    case saveChangesDialogButtons.Cancel:
+      onCancel();
+      return;
+
+    case saveChangesDialogButtons.Save:
+      onSave();
+      return;
+  }
 };
 
 const openFile = filePath => {
@@ -123,22 +145,16 @@ const openFileWithDialogUnsafe = () => {
 };
 
 const openFileWithDialog = () => {
-  switch (showSaveChangesDialog()) {
-    case saveChangesDialogButtons.Discard:
-      openFileWithDialogUnsafe();
-      return;
-
-    case saveChangesDialogButtons.Cancel:
-      return;
-
-    case saveChangesDialogButtons.Save:
+  showSaveChangesDialog({
+    onDiscard: openFileWithDialogUnsafe,
+    onSave: () => {
       saveFileWithDialog()
         .then(openFileWithDialogUnsafe)
         .catch(error => {
           throw new Error(error);
         });
-      return;
-  }
+    }
+  });
 };
 
 const saveFile = (path, data, callback = () => {}) => {
@@ -192,22 +208,16 @@ const newFileUnsafe = () => {
 };
 
 const newFile = () => {
-  switch (showSaveChangesDialog()) {
-    case saveChangesDialogButtons.Discard:
-      newFileUnsafe();
-      return;
-
-    case saveChangesDialogButtons.Cancel:
-      return;
-
-    case saveChangesDialogButtons.Save:
+  showSaveChangesDialog({
+    onDiscard: newFileUnsafe,
+    onSave: () => {
       saveFileWithDialog()
         .then(newFileUnsafe)
         .catch(error => {
           throw new Error(error);
         });
-      return;
-  }
+    }
+  });
 };
 
 const exportAsHTMLFileWithDialog = htmlData => {
@@ -429,15 +439,9 @@ const handleAppBeforeQuit = event => {
   // instead.
   if (!editorWindow.isVisible()) return;
 
-  switch (showSaveChangesDialog()) {
-    case saveChangesDialogButtons.Discard:
-      return;
-
-    case saveChangesDialogButtons.Cancel:
-      event.preventDefault();
-      return;
-
-    case saveChangesDialogButtons.Save:
+  showSaveChangesDialog({
+    onCancel: () => event.preventDefault(),
+    onSave: () => {
       event.preventDefault();
 
       saveFileWithDialog()
@@ -445,9 +449,8 @@ const handleAppBeforeQuit = event => {
         .catch(error => {
           throw new Error(error);
         });
-
-      return;
-  }
+    }
+  });
 };
 
 app.on('ready', handleAppReady);
