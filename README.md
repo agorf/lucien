@@ -8,6 +8,7 @@ TODO
 
 ## Features
 
+- Way less than 1000 [SLOC](https://en.wikipedia.org/wiki/Source_lines_of_code)
 - Support for [GitHub Flavored Markdown](https://github.github.com/gfm/)
 - Support for smart punctuation with [SmartyPants](https://daringfireball.net/projects/smartypants/)
 - Split view with Markdown text on the left and the HTML result on the right
