@@ -459,5 +459,8 @@ app.on('before-quit', handleAppBeforeQuit);
 
 module.exports = {
   exportAsHTMLFileWithDialog,
-  setFileState
+  openFile,
+  saveFileWithDialog,
+  setFileState,
+  showSaveChangesDialog
 };

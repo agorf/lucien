@@ -4,6 +4,7 @@ const lodash = require('lodash');
 const hljs = require('highlight.js');
 
 const syncVerticalScroll = require('./sync-vertical-scroll');
+const setUpDragAndDrop = require('./drag-and-drop');
 
 const mainProcess = remote.require('./main');
 
@@ -66,5 +67,19 @@ htmlView.addEventListener('click', event => {
 });
 
 syncVerticalScroll([markdownView, htmlView]);
+
+setUpDragAndDrop(markdownView, filePath => {
+  mainProcess.showSaveChangesDialog({
+    onDiscard: () => mainProcess.openFile(filePath),
+    onSave: () => {
+      mainProcess
+        .saveFileWithDialog()
+        .then(() => mainProcess.openFile(filePath))
+        .catch(error => {
+          throw new Error(error);
+        });
+    }
+  });
+});
 
 markdownView.focus();

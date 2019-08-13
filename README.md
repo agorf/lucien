@@ -14,6 +14,7 @@ TODO
 - Code syntax highlighting in HTML view
 - Synchronized scrolling between views
 - Automatic view split orientation (horizontal/vertical) based on window layout
+- Open file with drag & drop
 - Export Markdown document to a standalone HTML file
 
 ## Anti-features

@@ -54,6 +54,14 @@ body {
   padding: 0.2em;
 }
 
+.markdown-view.drag-over {
+  background-color: rgb(0, 255, 0, 0.1);
+}
+
+.markdown-view.drag-error {
+  background-color: rgb(255, 0, 0, 0.1);
+}
+
 .html-view {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
