@@ -429,33 +429,25 @@ const handleAppReady = () => {
       throw new Error(error);
     });
 
+  editorWindow.on('close', event => {
+    showSaveChangesDialog({
+      onCancel: () => event.preventDefault(),
+      onSave: () => {
+        event.preventDefault();
+
+        saveFileWithDialog()
+          .then(app.exit)
+          .catch(error => {
+            throw new Error(error);
+          });
+      }
+    });
+  });
+
   editorWindow.on('ready-to-show', editorWindow.show);
 };
 
-const handleAppBeforeQuit = event => {
-  // Do not ask for confirmation to discard changes if the window has been
-  // force-closed because we cannot reopen it again.
-  // TODO: Ask for confirmation to save or discard changes before quitting
-  // instead.
-  if (!editorWindow.isVisible()) return;
-
-  showSaveChangesDialog({
-    onCancel: () => event.preventDefault(),
-    onSave: () => {
-      event.preventDefault();
-
-      saveFileWithDialog()
-        .then(app.exit)
-        .catch(error => {
-          throw new Error(error);
-        });
-    }
-  });
-};
-
 app.on('ready', handleAppReady);
-
-app.on('before-quit', handleAppBeforeQuit);
 
 module.exports = {
   exportAsHTMLFileWithDialog,
