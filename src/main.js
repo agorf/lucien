@@ -23,12 +23,6 @@ const dialogFilters = [
   { name: 'All Files', extensions: ['*'] }
 ];
 
-const saveChangesDialogButtons = {
-  Discard: 0,
-  Cancel: 1,
-  Save: 2
-};
-
 let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
@@ -91,25 +85,31 @@ const showSaveChangesDialog = ({
     return;
   }
 
+  const dialogButtons = {
+    Discard: 0,
+    Cancel: 1,
+    Save: 2
+  };
+
   const clickedButton = dialog.showMessageBoxSync(editorWindow, {
     type: 'question',
-    buttons: Object.keys(saveChangesDialogButtons),
-    defaultId: saveChangesDialogButtons.Save,
-    cancelId: saveChangesDialogButtons.Cancel,
+    buttons: Object.keys(dialogButtons),
+    defaultId: dialogButtons.Save,
+    cancelId: dialogButtons.Cancel,
     title: 'Save changes?',
     message: 'Save changes before closing?'
   });
 
   switch (clickedButton) {
-    case saveChangesDialogButtons.Discard:
+    case dialogButtons.Discard:
       onDiscard();
       return;
 
-    case saveChangesDialogButtons.Cancel:
+    case dialogButtons.Cancel:
       onCancel();
       return;
 
-    case saveChangesDialogButtons.Save:
+    case dialogButtons.Save:
       onSave();
       return;
   }
