@@ -62,8 +62,7 @@ body {
 }
 
 .html-view {
-  box-sizing: border-box;
+  flex: 1;
   font-family: 'Open Sans', sans-serif;
   padding: 1em;
-  width: 100%;
 }
