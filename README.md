@@ -29,7 +29,7 @@ Things that have been left out intentionally:
 
 ## Installation
 
-### Prerequisites
+### Fonts
 
 Lucien uses the [Hack](https://sourcefoundry.org/hack/) and [Open Sans](https://fonts.google.com/specimen/Open+Sans) fonts for the Markdown and HTML view respectively. To install them in Ubuntu/Debian Linux, issue:
 
@@ -39,16 +39,16 @@ sudo apt install fonts-open-sans fonts-hack-ttf
 
 If the fonts are missing, it will fall back to the system's `monospace` and `sans-serif` declared fonts, but the visual end result may not be as good.
 
-### With a built package
+### With a pre-built package
 
 TODO
 
-### Manual with Git
+### Or manually with Git
 
 Clone the repository:
 
 ```shell
-git clone https://github.com/agorf/lucien.git
+git clone https://github.com/agorf/lucien
 ```
 
 Enter the checked-out directory:
@@ -69,25 +69,26 @@ Run the app:
 yarn start # or npm start
 ```
 
-## Use
+## Running
 
-TODO
+Write the following in a new file under `~/.local/share/applications/lucien.desktop` to have your application launcher find Lucien:
 
-### Desktop file
+```text
+[Desktop Entry]
+Exec=/path/to/lucien
+Name=Lucien
+Type=Application
+```
 
-TODO
+Don't forget to change the `Exec` property to the path of the Lucien binary in your system.
 
-### From the command-line
-
-Pass the path of a single Markdown document to the Lucien executable to edit it:
+Alternatively, you can run Lucien from a terminal, optionally passing the path of a single Markdown document:
 
 ```shell
 ./Lucien /path/to/my-file.md
 ```
 
-### Keyboard shortcuts
-
-Pretty standard:
+## Keyboard shortcuts
 
 |Shortcut|Functionality|
 |--------|-------------|
