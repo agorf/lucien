@@ -10,7 +10,6 @@ body {
 .body-container {
   display: flex;
   height: 100%;
-  min-height: 0;
 }
 
 .portrait .body-container {
