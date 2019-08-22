@@ -101,7 +101,7 @@ Alternatively, you can run Lucien from a terminal, optionally passing the path o
 |`Ctrl+X`|cut selected text|
 |`Ctrl+A`|select all text|
 |`Ctrl+Z`|undo last change|
-|`Ctrl+Shift+Z`|redo last change|
+|`Ctrl+Shift+Z` or `Ctrl+Y`|redo last change|
 
 ## Acknowledgements
 
