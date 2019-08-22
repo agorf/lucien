@@ -48,6 +48,10 @@ ipcRenderer.on('export-as-html', () => {
   mainProcess.exportAsHTMLFileWithDialog(htmlView.innerHTML);
 });
 
+ipcRenderer.on('toggle-html', () => {
+  document.body.classList.toggle('no-html');
+});
+
 markdownView.addEventListener('input', ({ target }) => {
   mainProcess.setFileState({
     data: target.value,

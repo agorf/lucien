@@ -368,7 +368,20 @@ const editorWindowMenuTemplate = [
     ]
   },
   { label: '&Edit', role: 'editMenu' },
-  app.isPackaged ? null : { label: '&View', role: 'viewMenu' },
+  {
+    label: '&View',
+    submenu: [
+      {
+        label: 'Toggle HTML preview',
+        accelerator: 'CommandOrControl+Shift+H',
+        click: () => editorWindow.webContents.send('toggle-html')
+      },
+      { role: 'togglefullscreen' },
+      { type: 'separator' },
+      { role: 'reload' },
+      { role: 'toggleDevTools' }
+    ]
+  },
   {
     label: '&Help',
     submenu: [

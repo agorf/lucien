@@ -66,3 +66,14 @@ body {
   font-family: 'Open Sans', sans-serif;
   padding: 1em;
 }
+
+.no-html .html-wrapper {
+  display: none;
+}
+
+.no-html .markdown-wrapper {
+  border-bottom: none;
+  border-right: none;
+  max-height: none;
+  max-width: none;
+}
