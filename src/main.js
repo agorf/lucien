@@ -389,7 +389,7 @@ const editorWindowMenuTemplate = [
         label: 'Markdown tutorial',
         click: () => {
           shell.openExternal(
-            'https://github.com/agorf/lucien/blob/master/markdown-tutorial.md'
+            'https://github.com/agorf/lucien/blob/master/docs/markdown-tutorial.md'
           );
         }
       },
