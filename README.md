@@ -2,7 +2,7 @@
 
 A minimal, cross-platform, graphical [Markdown](https://commonmark.org/) text editor
 
-TODO: Screenshot
+![screenshot](https://raw.githubusercontent.com/agorf/lucien/master/docs/screenshot.png)
 
 ## Features
 
