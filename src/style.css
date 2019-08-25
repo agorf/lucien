@@ -51,6 +51,7 @@ body {
   line-height: 1.5;
   outline: none;
   padding: 0.2em;
+  resize: none;
 }
 
 .markdown-view.drag-over {
