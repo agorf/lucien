@@ -414,6 +414,7 @@ const editorWindowMenuTemplate = [
 const handleAppReady = () => {
   editorWindow = new BrowserWindow({
     show: false,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true
     }
