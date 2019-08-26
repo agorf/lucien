@@ -14,7 +14,7 @@ A minimal, cross-platform, graphical [Markdown](https://commonmark.org/) text ed
   - Synchronized scrolling
   - Automatic orientation (horizontal/vertical) based on window layout (portrait/landscape)
 - Open file with dialog or drag & drop
-- Auto-hiding menu bar (visible with `Alt`)
+- Optional auto-hiding menu bar (toggled with `Alt`)
 - Export to standalone HTML file
 - Way less than 1K [SLOC](https://en.wikipedia.org/wiki/Source_lines_of_code)
 
@@ -103,8 +103,6 @@ Alternatively, you can run Lucien from a terminal, optionally passing the path o
 |`Ctrl+A`|select all text|
 |`Ctrl+Z`|undo last change|
 |`Ctrl+Shift+Z` or `Ctrl+Y`|redo last change|
-
-**Note:** The menu bar is hidden automatically. You can press the `Alt` key to show it.
 
 ## Acknowledgements
 

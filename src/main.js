@@ -27,6 +27,7 @@ let editorWindow = null;
 let editorWindowMenu = null;
 let fileState = { ...initialFileState };
 let defaultDialogPath = app.getPath('documents');
+let isMenuBarAutoHide = false;
 
 // Clean up command-line arguments
 const argv = [...process.argv];
@@ -377,6 +378,23 @@ const editorWindowMenuTemplate = [
         click: () => editorWindow.webContents.send('toggle-html')
       },
       { role: 'togglefullscreen' },
+      {
+        label: 'Auto-hide menu bar',
+        type: 'checkbox',
+        click: () => {
+          const isVisible = editorWindow.isMenuBarVisible();
+
+          isMenuBarAutoHide = !isMenuBarAutoHide;
+          editorWindow.setAutoHideMenuBar(isMenuBarAutoHide);
+
+          if (isVisible && isMenuBarAutoHide) {
+            editorWindow.setMenuBarVisibility(false);
+          } else if (!isVisible && !isMenuBarAutoHide) {
+            editorWindow.setMenuBarVisibility(true);
+          }
+        },
+        checked: isMenuBarAutoHide
+      },
       { type: 'separator' },
       { role: 'reload' },
       { role: 'toggleDevTools' }
@@ -414,7 +432,6 @@ const editorWindowMenuTemplate = [
 const handleAppReady = () => {
   editorWindow = new BrowserWindow({
     show: false,
-    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true
     }
