@@ -17,7 +17,7 @@
     "build": "electron-packager . --out=build --overwrite"
   },
   "dependencies": {
-    "electron": "^6.0.1",
+    "electron": "^7.2.4",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.9",
     "lodash": "^4.17.15",
