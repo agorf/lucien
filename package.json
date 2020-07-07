@@ -14,16 +14,18 @@
   "scripts": {
     "start": "electron .",
     "lint": "eslint src/*.js",
-    "build": "electron-packager . --out=build --overwrite"
+    "build": "electron-packager . --out=build --overwrite",
+    "build:appimage": "electron-builder -l appimage --publish=never"
   },
   "dependencies": {
-    "electron": "^7.2.4",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.15.9",
     "lodash": "^4.17.15",
     "marked": "^0.7.0"
   },
   "devDependencies": {
+    "electron": "^7.2.4",
+    "electron-builder": "^22.7.0",
     "electron-packager": "^14.0.4",
     "eslint": "^6.1.0",
     "prettier": "^1.18.2"
