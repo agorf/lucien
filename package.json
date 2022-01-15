@@ -24,7 +24,7 @@
     "marked": "^4.0.10"
   },
   "devDependencies": {
-    "electron": "^7.2.4",
+    "electron": "^11.5.0",
     "electron-builder": "^22.7.0",
     "electron-packager": "^14.0.4",
     "eslint": "^6.1.0",
